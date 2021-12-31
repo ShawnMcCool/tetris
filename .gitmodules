@@ -1,0 +1,3 @@
+[submodule "virtual-machine"]
+	path = virtual-machine
+	url = git@github.com:heybigname/virtual-machine.git
