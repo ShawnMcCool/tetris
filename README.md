@@ -9,6 +9,8 @@
 - line clear: when a line is completely cleared, remove it from the board and drop lines until all empty lines are above the top-most mino in the matrix
 - lock down: the moment a tetrimino locks into place and can no longer be moved
 - tetris notification: reward the player with a notification when they clear a tetris (4 lines at once)
+- keyboard controls: left / right shifts the tetrimino
+- basic display: text-based terminal display
 
 ### Nice to Haves
 
@@ -16,3 +18,7 @@
 - hard drop: drop a tetrimino from the current position directly into lock down by tapping 'up'
 - soft drop: increase the speed at which a tetrimino falls by holding 'down'
 - scoring
+
+## References
+
+- https://tetris.com/article/35/tetris-lingo-every-player-should-know

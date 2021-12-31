@@ -1,0 +1,16 @@
+{
+    "name": "shawnmccool/tetris",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Tetris\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Shawn McCool",
+            "email": "shawn@mccool.email"
+        }
+    ],
+    "require": {}
+}
