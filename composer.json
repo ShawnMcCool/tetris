@@ -12,5 +12,7 @@
             "email": "shawn@mccool.email"
         }
     ],
-    "require": {}
+    "require": {
+      "ext-readline": "*"
+    }
 }
