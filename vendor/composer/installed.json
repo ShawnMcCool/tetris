@@ -1,0 +1,49 @@
+{
+    "packages": [
+        {
+            "name": "shawnmccool/phansi",
+            "version": "0.0.1",
+            "version_normalized": "0.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ShawnMcCool/phansi.git",
+                "reference": "896ffd3dc193c8d9a25d5c2c61a3a2b70a6b5af3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ShawnMcCool/phansi/zipball/896ffd3dc193c8d9a25d5c2c61a3a2b70a6b5af3",
+                "reference": "896ffd3dc193c8d9a25d5c2c61a3a2b70a6b5af3",
+                "shasum": ""
+            },
+            "time": "2021-01-30T15:08:20+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "PhAnsi\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shawn McCool",
+                    "email": "shawn@mccool.email"
+                }
+            ],
+            "description": "A light-weight self-contained PHP Ansi library.",
+            "support": {
+                "issues": "https://github.com/ShawnMcCool/phansi/issues",
+                "source": "https://github.com/ShawnMcCool/phansi/tree/0.0.1"
+            },
+            "install-path": "../shawnmccool/phansi"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

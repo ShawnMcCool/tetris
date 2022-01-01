@@ -13,6 +13,7 @@
         }
     ],
     "require": {
-      "ext-readline": "*"
+      "ext-readline": "*",
+        "shawnmccool/phansi": "^0.0.1"
     }
 }

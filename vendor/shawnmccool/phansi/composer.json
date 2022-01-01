@@ -1,0 +1,21 @@
+{
+    "name": "shawnmccool/phansi",
+    "description": "A light-weight self-contained PHP Ansi library.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shawn McCool",
+            "email": "shawn@mccool.email"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PhAnsi\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "require": {}
+}

@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Tetris\\' => array($baseDir . '/src'),
+    'PhAnsi\\' => array($vendorDir . '/shawnmccool/phansi/src'),
 );

@@ -1,0 +1,53 @@
+<?php
+
+use function PhAnsi\red;
+use function PhAnsi\cyan;
+use function PhAnsi\blue;
+use function PhAnsi\bold;
+use function PhAnsi\bgRed;
+use function PhAnsi\white;
+use function PhAnsi\green;
+use function PhAnsi\black;
+use function PhAnsi\blink;
+use function PhAnsi\bgCyan;
+use function PhAnsi\bgBlue;
+use function PhAnsi\yellow;
+use function PhAnsi\hidden;
+use function PhAnsi\italic;
+use function PhAnsi\bgWhite;
+use function PhAnsi\bgGreen;
+use function PhAnsi\bgBlack;
+use function PhAnsi\magenta;
+use function PhAnsi\inverse;
+use function PhAnsi\bgYellow;
+use function PhAnsi\bgMagenta;
+use function PhAnsi\underline;
+use function PhAnsi\brightWhite;
+use function PhAnsi\brightBlack;
+
+include 'vendor/autoload.php';
+
+echo bold("\nbold");
+echo italic("\nitalic");
+echo underline("\nunderline");
+echo blink("\nblink");
+echo inverse("\ninverse");
+echo hidden("\nhidden");
+echo black("\nblack");
+echo red("\nred");
+echo green("\ngreen");
+echo yellow("\nyellow");
+echo blue("\nblue");
+echo magenta("\nmagenta");
+echo cyan("\ncyan");
+echo white("\nwhite");
+echo brightBlack("\nbrightBlack");
+echo brightWhite("\nbrightWhite");
+echo bgBlack("\nbgBlack");
+echo bgRed("\nbgRed");
+echo bgGreen("\nbgGreen");
+echo bgYellow("\nbgYellow");
+echo bgBlue("\nbgBlue");
+echo bgMagenta("\nbgMagenta");
+echo bgCyan("\nbgCyan");
+echo bgWhite("\nbgWhite");

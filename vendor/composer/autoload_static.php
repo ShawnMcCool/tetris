@@ -6,10 +6,18 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
 {
+    public static $files = array (
+        '872c44ae2fa5f07d10e3701bc20e2ffe' => __DIR__ . '/..' . '/shawnmccool/phansi/src/functions.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'T' => 
         array (
             'Tetris\\' => 7,
+        ),
+        'P' => 
+        array (
+            'PhAnsi\\' => 7,
         ),
     );
 
@@ -17,6 +25,10 @@ class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
         'Tetris\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'PhAnsi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/shawnmccool/phansi/src',
         ),
     );
 

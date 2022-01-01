@@ -1,0 +1,61 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "b697f592c4820c7243398ae8c62e02e2",
+    "packages": [
+        {
+            "name": "shawnmccool/phansi",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ShawnMcCool/phansi.git",
+                "reference": "896ffd3dc193c8d9a25d5c2c61a3a2b70a6b5af3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ShawnMcCool/phansi/zipball/896ffd3dc193c8d9a25d5c2c61a3a2b70a6b5af3",
+                "reference": "896ffd3dc193c8d9a25d5c2c61a3a2b70a6b5af3",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PhAnsi\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shawn McCool",
+                    "email": "shawn@mccool.email"
+                }
+            ],
+            "description": "A light-weight self-contained PHP Ansi library.",
+            "support": {
+                "issues": "https://github.com/ShawnMcCool/phansi/issues",
+                "source": "https://github.com/ShawnMcCool/phansi/tree/0.0.1"
+            },
+            "time": "2021-01-30T15:08:20+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "ext-readline": "*"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+}
