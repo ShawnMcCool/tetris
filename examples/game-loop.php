@@ -2,7 +2,6 @@
 
 use Tetris\Time\FrameTimer;
 use Tetris\Time\SystemClock;
-use Tetris\Time\FrameCounter;
 use Tetris\Time\NonBlockingTimer;
 use Tetris\UI\Input\NonBlockingKeyboardPlayerInput;
 use function PhAnsi\clear_screen;
@@ -33,11 +32,6 @@ $clock = new SystemClock();
  */
 $frameTimer = new FrameTimer($clock, 20);
 $frameTimer->start();
-
-/*
- * frame counter
- */
-$frameCounter = new FrameCounter($clock);
 
 /*
  * gameplay timer

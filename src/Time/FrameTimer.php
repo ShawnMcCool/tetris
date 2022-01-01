@@ -32,7 +32,6 @@ class FrameTimer
         $secondsToSleep = $secondsPerFrame - $deltaTime;
         
         if ($secondsToSleep > 0) {
-            
             time_sleep_until($this->clock->currentTimeWithMilliseconds() + $secondsToSleep);
         }
 
