@@ -8,7 +8,6 @@ use Tetris\Time\FrameTimer;
 use Tetris\Time\SystemClock;
 use Tetris\UI\Gameplay\Render;
 use Tetris\Time\NonBlockingTimer;
-use Tetris\Processes\DisplayEventsTextually;
 use Tetris\Processes\SpawnNewTetrimino;
 use Tetris\EventDispatch\DispatchEvents;
 use Tetris\UI\Input\NonBlockingKeyboardPlayerInput;
@@ -59,7 +58,7 @@ $events = new DispatchEvents(
     [
         //new DisplayEventsTextually(),
         new SpawnNewTetrimino($game),
-        new Render()
+        new Render(),
     ]
 );
 
@@ -69,20 +68,24 @@ while (true) {
     $pressedKey = $playerInput->pressedKey();
     if ($pressedKey) {
         switch ($pressedKey) {
-            case 'a': // left arrow, A in wasd
+            case 'a': // dvorak and qwerty left arrow, A in wasd
                 $game->movePiece(Direction::left());
                 break;
-            case 'e': // right arrow, D in wasd
+            case 'e': // dvorak right arrow, D in wasd
+            case 'd': // qwerty right arrow
                 $game->movePiece(Direction::right());
                 break;
-            case "'": // q key, rotate left
+            case 's': // dvorak rotate left
+            case ';': // qwerty rotate left
                 $game->rotatePiece(Direction::left());
                 break;
-            case '.': // e key, rotate right
+            case '-': // dvorak rotate right
+            case "'": // qwerty rotate right
                 $game->rotatePiece(Direction::right());
                 break;
-            case 'q': // quit
-                die('quit');
+            case 'q': // dvorak
+            case 'x': // qwerty exit
+                die('exit');
         }
     }
 
