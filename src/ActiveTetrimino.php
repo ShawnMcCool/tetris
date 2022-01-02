@@ -4,27 +4,34 @@ final class ActiveTetrimino
 {
     public function __construct(
         private Tetrimino $tetrimino,
-        private Position $position
+        private Vector $position
     ) {
     }
 
-    public function tetrimino(): Tetrimino
+    public function matrix(): Matrix
     {
-        return $this->tetrimino;
+        return $this->tetrimino->matrix();
     }
-
-    public function position(): Position
+    
+    public function matrixPosition(): Vector
     {
         return $this->position;
     }
-
+    
+    public function translate(Vector $vector): self
+    {
+        return new self(
+            $this->tetrimino,
+            $this->position->plus($vector)
+        );
+    }
+    
     public function downOne(): self
     {
         return new self(
             $this->tetrimino,
-            Position::fromInt(
-                $this->position->x(),
-                $this->position->y() + 1
+            $this->position->plus(
+                Vector::fromInt(0, 1)
             )
         );
     }
@@ -32,9 +39,7 @@ final class ActiveTetrimino
     public function rotate(Direction $direction): self
     {
         return new ActiveTetrimino(
-            $direction->isLeft()
-                ? $this->tetrimino->rotateLeft()
-                : $this->tetrimino->rotateRight(),
+            $this->tetrimino->rotate($direction),
             $this->position
         );
     }

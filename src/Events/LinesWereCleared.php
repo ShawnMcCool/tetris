@@ -1,12 +1,12 @@
 <?php namespace Tetris\Events;
 
-use Tetris\Matrix;
+use Tetris\Playfield;
 
 final class LinesWereCleared
 {
     public function __construct(
         private array $clearedRowNumbers,
-        private Matrix $resultingMatrix
+        private Playfield $resultingMatrix
     ) {
     }
 }

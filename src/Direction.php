@@ -26,4 +26,9 @@ final class Direction
     {
         return new self('right');
     }
+
+    public function toString(): string
+    {
+        return $this->direction;
+    }
 }

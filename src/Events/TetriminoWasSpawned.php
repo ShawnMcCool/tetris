@@ -8,4 +8,9 @@ final class TetriminoWasSpawned
         private ActiveTetrimino $tetrimino,
     ) {
     }
+
+    public function tetrimino(): ActiveTetrimino
+    {
+        return $this->tetrimino;
+    }
 }

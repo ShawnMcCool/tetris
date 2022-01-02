@@ -1,49 +1,104 @@
 <?php namespace Tetris;
 
-/**
- * The matrix is a 10x40 playfield. Once any block is locked down above
- * the first row, the game is over.
- */
 final class Matrix
 {
     private function __construct(
-        private Dimensions $dimensions,
-        private Position $tetriminoSpawnPosition
+        private array $matrix
     ) {
     }
 
-    public static function withDimensions(
-        Dimensions $dimensions,
-        Position $tetriminoSpawnPosition
-    ): self {
-        return new self($dimensions, $tetriminoSpawnPosition);
-    }
-
-    public static function standard(): self
+    public function dimensions(): Vector
     {
-        return self::withDimensions(
-            Dimensions::fromInt(40, 10),
-            Position::fromInt(1, 5),
+        if (empty($this->matrix)) {
+            return Vector::zero();
+        }
+        
+        return Vector::fromInt(
+            count($this->matrix[0]),
+            count($this->matrix)
         );
     }
+    
+    public function subset(
+        Vector $topLeft,
+        Vector $bottomRight
+    ): Matrix {
+        /*
+         * [0, 0, 0, 0, 0, 0],
+         * [0, 1, 0, 0, 0, 0],
+         * [0, 0, 0, 0, 0, 0],
+         * [0, 0, 0, 0, 0, 0],
+         * [0, 0, 0, 0, 1, 0],
+         * [0, 0, 0, 0, 0, 0],
+         * 
+         * 1,1 - 4,4
+         */
+        $relevantRows = array_slice($this->matrix, $topLeft->y(), $bottomRight->y() - $topLeft->y());
 
-    public function canFit(ActiveTetrimino $tetrimino): bool
-    {
-        return true;
+        $newMatrix = array_map(
+            fn(array $row) => array_slice($row, $topLeft->x(), $bottomRight->x()),
+            $relevantRows
+        );
+
+        return Matrix::fromArray($newMatrix);
     }
 
-    public function dimensions(): Dimensions
+    public function minoPositions(): array
     {
-        return $this->dimensions;
+        $positions = [];
+        
+        foreach ($this->matrix as $rowCount => $rows) {
+            foreach ($rows as $colCount => $space) {
+                if ($space) {
+                    $positions[] = Vector::fromInt($colCount, $rowCount);
+                }
+            }
+        }
+        
+        return $positions;
     }
 
-    public function tetriminoSpawnPosition(): Position
+    private function hasMinoAt(Vector $position): bool
     {
-        return $this->tetriminoSpawnPosition;
+        return
+            isset($this->matrix[$position->y()][$position->x()]) &&
+            $this->matrix[$position->y()][$position->x()] == 1;
     }
 
-    public function lock(ActiveTetrimino $tetrimino): void
+    public function collidesWith(
+        Matrix $invader,
+        Vector $invaderPosition
+    ): bool {
+        // loop through each row in the invader
+        foreach ($invader->minoPositions() as $minoPosition) {
+            
+            $testPosition = $invaderPosition->plus($minoPosition);
+            
+            if ($this->hasMinoAt($testPosition)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public static function fromArray(array $matrix): self
     {
-        //
+        return new self($matrix);
+    }
+
+    public static function withDimensions(int $x, int $y): self
+    {
+        return new self(
+        // rows = y
+            array_fill(
+                0,
+                $y,
+                // cols = x
+                array_fill(
+                    0, $x, 0
+                )
+            )
+        );
     }
 }

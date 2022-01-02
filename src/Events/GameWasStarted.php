@@ -1,11 +1,16 @@
 <?php namespace Tetris\Events;
 
-use Tetris\Matrix;
+use Tetris\Playfield;
 
 final class GameWasStarted
 {
     public function __construct(
-        private Matrix $matrix
+        private Playfield $matrix
     ) {
+    }
+
+    public function matrix(): Playfield
+    {
+        return $this->matrix;
     }
 }

@@ -1,15 +1,23 @@
 <?php namespace Tetris\Events;
 
-use Tetris\Position;
-use Tetris\Tetrimino;
 use Tetris\Direction;
+use Tetris\ActiveTetrimino;
 
 final class TetriminoWasMoved
 {
     public function __construct(
-        private Tetrimino $tetrimino,
+        private ActiveTetrimino $tetrimino,
         private Direction $direction,
-        private Position $newPosition,
     ) {
+    }
+
+    public function tetrimino(): ActiveTetrimino
+    {
+        return $this->tetrimino;
+    }
+
+    public function direction(): Direction
+    {
+        return $this->direction;
     }
 }

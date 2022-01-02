@@ -8,4 +8,9 @@ final class TetriminoFell
         private ActiveTetrimino $tetrimino
     ) {
     }
+
+    public function tetrimino(): ActiveTetrimino
+    {
+        return $this->tetrimino;
+    }
 }

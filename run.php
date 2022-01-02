@@ -1,16 +1,17 @@
 <?php
 
 use Tetris\Game;
-use Tetris\Matrix;
+use Tetris\Playfield;
+use Tetris\Direction;
 use Tetris\TetriminoBag;
 use Tetris\Time\FrameTimer;
 use Tetris\Time\SystemClock;
+use Tetris\UI\Gameplay\Render;
 use Tetris\Time\NonBlockingTimer;
-use Tetris\Processes\EchoEventName;
+use Tetris\Processes\DisplayEventsTextually;
 use Tetris\Processes\SpawnNewTetrimino;
 use Tetris\EventDispatch\DispatchEvents;
 use Tetris\UI\Input\NonBlockingKeyboardPlayerInput;
-use function PhAnsi\set_cursor_position;
 
 require 'vendor/autoload.php';
 
@@ -18,7 +19,7 @@ require 'vendor/autoload.php';
  * start the game
  */
 $game = Game::start(
-    Matrix::standard(),
+    Playfield::standard(),
     new TetriminoBag()
 );
 
@@ -56,21 +57,43 @@ $playerInput = new NonBlockingKeyboardPlayerInput();
  */
 $events = new DispatchEvents(
     [
-        new EchoEventName(),
+        //new DisplayEventsTextually(),
         new SpawnNewTetrimino($game),
+        new Render()
     ]
 );
 
-
 while (true) {
+
+    // player input
+    $pressedKey = $playerInput->pressedKey();
+    if ($pressedKey) {
+        switch ($pressedKey) {
+            case 'a': // left arrow, A in wasd
+                $game->movePiece(Direction::left());
+                break;
+            case 'e': // right arrow, D in wasd
+                $game->movePiece(Direction::right());
+                break;
+            case "'": // q key, rotate left
+                $game->rotatePiece(Direction::left());
+                break;
+            case '.': // e key, rotate right
+                $game->rotatePiece(Direction::right());
+                break;
+            case 'q': // quit
+                die('quit');
+        }
+    }
+
     // process game time
     $gameplayTimer->tick();
-    
+
     // dispatch state changes
     $events->dispatch(
         $game->flushEvents()
     );
-    
+
     // sleep until next frame
     $frameTimer->waitForNextFrame();
 }

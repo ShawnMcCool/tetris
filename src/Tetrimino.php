@@ -40,38 +40,34 @@ final class Tetrimino
         private int $currentIndex = 0,
     ) {
     }
+    
+    public function rotate(Direction $direction): self
+    {
+        $newIndex = $this->currentIndex + ($direction->isLeft() ? 1 : -1);
+
+        if ($newIndex == count($this->shapeArray)) {
+            $newIndex = 0;
+        }
+
+        if ($newIndex < 0) {
+            $newIndex = count($this->shapeArray) - 1;
+        }
+
+        return new self(
+            $this->shapeArray,
+            $newIndex,
+        );
+    }
+
+    public function matrix(): Matrix
+    {
+        return Matrix::fromArray(
+            $this->shapeArray[$this->currentIndex]
+        );
+    }
 
     public static function I(): self
     {
         return new self(self::I);
-    }
-
-    public function rotateRight(): self
-    {
-        $newIndex = $this->currentIndex + 1;
-
-        if ($newIndex > count($this->shapeArray) - 1) {
-            $newIndex = 0;
-        }
-        
-        return new self(
-            $this->shapeArray,
-            $newIndex,
-        );
-    }
-
-    public function rotateLeft(): self
-    {
-        $newIndex = $this->currentIndex - 1;
-        
-
-        if ($newIndex < 0) {
-            $newIndex = count($this->shapeArray);
-        }
-        
-        return new self(
-            $this->shapeArray,
-            $newIndex,
-        );
     }
 }
