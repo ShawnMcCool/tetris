@@ -24,7 +24,6 @@ $ php ./tests/run.php
 ## Controls
 
 QWERTY controls:  
-
 A / D = move left / right  
 ; / ' = rotate left / right
 
