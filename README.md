@@ -23,13 +23,13 @@ $ php ./tests/run.php
 
 ## Controls
 
-QWERTY controls:
+QWERTY controls:  
 
-A / D = move left / right
+A / D = move left / right  
 ; / ' = rotate left / right
 
-DVORAK controls:
-A / O = move left / right
+DVORAK controls:  
+A / O = move left / right  
 s / - = rotate left / right
 
 ## Requirements
