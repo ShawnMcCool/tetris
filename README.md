@@ -5,6 +5,33 @@ The main branch is the most up-to-date. There are branches marking the endpoints
 - [End of Stream 1](https://github.com/ShawnMcCool/tetris/tree/end-of-stream-1)
 - [End of Stream 2](https://github.com/ShawnMcCool/tetris/tree/end-of-stream-2)
 
+## How to Run
+
+This project requires php 8.0 and the readline extension (should come with your PHP). You need to run the game from a terminal that supports ANSI character codes.
+
+To play Tetris:
+
+```shell
+$ php ./play.php
+```
+
+To run the tests:
+
+```shell
+$ php ./tests/run.php
+```
+
+## Controls
+
+QWERTY controls:
+
+A / D = move left / right
+; / ' = rotate left / right
+
+DVORAK controls:
+A / O = move left / right
+s / - = rotate left / right
+
 ## Requirements
 
 ### Must Haves
@@ -25,12 +52,8 @@ The main branch is the most up-to-date. There are branches marking the endpoints
 - soft drop: increase the speed at which a tetrimino falls by holding 'down'
 - scoring
 - different randomization algorithms for drawing pieces
+- wall kick
 
 ## References
 
 - https://tetris.com/article/35/tetris-lingo-every-player-should-know
-
-# Concepts
-
-Nouns: Game, tetriminos, minos, matrix, lines, tetris
-Verbs: starts, stops, pause, fall, rotate, clear

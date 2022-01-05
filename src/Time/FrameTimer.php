@@ -14,7 +14,7 @@ class FrameTimer
     public function start(): void
     {
         $this->timerIsRunning = true;
-        $this->lastFrameTime = $this->clock->currentTimeWithMilliseconds();
+        $this->recordTheFrameStartTime();
     }
 
     public function waitForNextFrame(): void
@@ -23,18 +23,34 @@ class FrameTimer
             return;
         }
 
-        $now = $this->clock->currentTimeWithMilliseconds();
+        $this->waitUntilTheEndOfThisFrame();
+        $this->recordTheFrameStartTime();
+    }
 
-        $deltaTime = $now - $this->lastFrameTime;
+    private function waitUntilTheEndOfThisFrame(): void
+    {
+        $secondsToSleep = $this->secondsRemainingInThisFrame();
 
-        $secondsPerFrame = 1 / $this->framesPerSecond;
-
-        $secondsToSleep = $secondsPerFrame - $deltaTime;
-        
         if ($secondsToSleep > 0) {
-            time_sleep_until($this->clock->currentTimeWithMilliseconds() + $secondsToSleep);
+            $this->clock->sleepUntil(
+                $this->clock->currentTimeWithMilliseconds() + $secondsToSleep
+            );
         }
+    }
 
-        $this->lastFrameTime = $now;
+    private function recordTheFrameStartTime(): void
+    {
+        $this->lastFrameTime = $this->clock->currentTimeWithMilliseconds();
+    }
+
+    private function frameDeltaTime(): float
+    {
+        return $this->clock->currentTimeWithMilliseconds() - $this->lastFrameTime;
+    }
+
+    private function secondsRemainingInThisFrame(): float
+    {
+        $secondsPerFrame = 1 / $this->framesPerSecond;
+        return $secondsPerFrame - $this->frameDeltaTime();
     }
 }

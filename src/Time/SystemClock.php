@@ -11,4 +11,9 @@ final class SystemClock implements Clock
     {
         return time();
     }
+
+    function sleepUntil(float $timestampWithMilliseconds): void
+    {
+        time_sleep_until($timestampWithMilliseconds);
+    }
 }

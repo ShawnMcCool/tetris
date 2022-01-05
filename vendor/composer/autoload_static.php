@@ -14,6 +14,7 @@ class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
         'T' => 
         array (
             'Tetris\\' => 7,
+            'Tests\\' => 6,
         ),
         'P' => 
         array (
@@ -25,6 +26,10 @@ class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
         'Tetris\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'PhAnsi\\' => 
         array (

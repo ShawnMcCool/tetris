@@ -5,10 +5,10 @@ use Closure;
 /**
  * This non-blocking timer's tick() method is run once during every game 'frame'.
  * The timer's 'onTick' function is called every "millisecondInterval" milliseconds.
- * This timer will run multiple onTick functions during a single tick() if the timer 
- * is 'backed up'. So that on average the onTick functions per millisecondInterval 
+ * This timer will run multiple onTick functions during a single tick() if the timer
+ * is 'backed up'. So that on average the onTick functions per millisecondInterval
  * remains precise.
- * 
+ *
  * I can word this better.
  */
 class NonBlockingTimer
@@ -57,15 +57,15 @@ class NonBlockingTimer
 
     private function processTick()
     {
-        if ($this->onTickFunction) {
-            ($this->onTickFunction)();
-        }
-
         $this->timeOfLastTick = $this->timeOfNextTick();
+
+        if ($this->onTickFunction) {
+            ($this->onTickFunction)($this->timeOfLastTick);
+        }
     }
 
     private function timeOfNextTick(): float
     {
-        return $this->timeOfLastTick + ($this->intervalSeconds / 1000);
+        return $this->timeOfLastTick + $this->intervalSeconds;
     }
 }

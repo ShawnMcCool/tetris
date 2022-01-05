@@ -91,3 +91,25 @@ function expectFalse(bool $expected) {
 
     throw new InvalidAssertion("Expected value to be 'false' but got 'true'.");
 }
+
+function expectFloat(float $expected, float $actual) {
+    
+    if (abs($expected - $actual) < PHP_FLOAT_EPSILON) {
+        return;
+    }
+    
+    throw new InvalidAssertion("Expected float '{$actual}' was not within epsilon of float '{$expected}'.");
+}
+
+function expectOutputStartsWith(string $expected, callable $expression) {
+    
+    ob_start();
+    $expression();
+    $actual = ob_get_clean();
+    
+    if (str_starts_with($actual, $expected)) {
+        return;
+    }
+    
+    throw new InvalidAssertion("Expected string to start with '$expected' but received '$actual'.");
+}

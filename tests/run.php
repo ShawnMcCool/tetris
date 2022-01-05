@@ -2,7 +2,8 @@
 
 require 'test_bootstrap.php';
 
-$testFiles = glob('tests/*_tests.php');
+$searchDepth = '/,/*/,/*/*/,/*/*/*/,/*/*/*/*/,/*/*/*/*/*/,/*/*/*/*/*/*/,/*/*/*/*/*/*/*/,/*/*/*/*/*/*/*/*/,/*/*/*/*/*/*/*/*/*/';
+$testFiles = glob('tests{'.$searchDepth.'}*_tests.php', GLOB_BRACE);
 
 foreach ($testFiles as $testFile) {
     require($testFile);

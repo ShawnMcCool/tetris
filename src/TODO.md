@@ -1,0 +1,8 @@
+- the implementation concept of 'matrix' becomes 'minos'
+- there's only tetrimino, not active tetrimino
+- start position is a part of the game
+- there's no need for a playfield
+- unit tests
+- standard layout is 10,20 not 10,40
+- add 'render character' to mino
+- Tetrimino is 4 minos, it was in the name all along
