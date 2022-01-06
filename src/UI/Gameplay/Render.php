@@ -10,6 +10,7 @@ use Tetris\Events\TetriminoWasMoved;
 use Tetris\Events\TetriminoWasSpawned;
 use Tetris\Events\TetriminoWasRotated;
 use Tetris\EventDispatch\EventListener;
+use Tetris\Events\TetriminoBecameLocked;
 use function PhAnsi\clear_screen;
 use function PhAnsi\set_cursor_position;
 
@@ -35,77 +36,113 @@ final class Render implements EventListener
         } elseif ($event instanceof TetriminoWasMoved) {
             $this->tetrimino = $event->tetrimino;
             $this->render();
+        } elseif ($event instanceof TetriminoBecameLocked) {
+            $this->matrix = $event->resultingMatrix;
+            $this->render();
         }
     }
 
-    private function render()
+    private function render(): void
     {
         clear_screen();
-
-        $this->renderTheMatrix();
-        $this->renderActiveTetrimino();
+        
+        $this->renderMatrix();
+        $this->renderTetrimino();
     }
 
-    private function renderTheMatrix()
+    private function renderMatrix()
     {
         $dimensions = $this->matrix->dimensions();
+        $frameMargin = Vector::fromInt(1, 1);
 
-        set_cursor_position(0, 0);
-        
-        // draw ceiling
-        $this->drawCharacter(
-            Vector::fromInt(0, 1),
-            str_repeat('-', $dimensions->x() + 2)
+        /*
+         * ceiling
+         */
+        $this->draw(
+        // top left of the screen
+            Vector::one(),
+            // a bar all the way across including
+            // over the 2 sides of the frame
+            str_repeat(
+                '-',
+                $dimensions->add(
+                    $frameMargin->times(2)
+                )->x()
+            )
         );
-        
+
         // draw left wall
-        foreach (range(2, $dimensions->y()+2) as $i) {
-            $this->drawCharacter(
-                Vector::fromInt(0, $i),
+        foreach (range(1, $dimensions->y()) as $i) {
+            $this->draw(
+                Vector::fromInt(
+                    1,
+                    $i + $frameMargin->y()
+                ),
                 '|'
             );
         }
-        
-        // draw left wall
-        foreach (range(2, $dimensions->y()+2) as $i) {
-            $this->drawCharacter(
-                Vector::fromInt($dimensions->x()+2, $i),
+
+        // draw right wall
+        foreach (range(1, $dimensions->y()) as $i) {
+            $this->draw(
+                Vector::fromInt(
+                    $dimensions->add($frameMargin->times(2))->x(),
+                    $i + $frameMargin->y()
+                ),
                 '|'
             );
         }
 
         // draw floor
-        $this->drawCharacter(
-            Vector::fromInt(0,$dimensions->y()+2),
-            str_repeat('-', $dimensions->x() + 2)
+        $this->draw(
+        // bottom left of the screen
+            Vector::fromInt(
+                0,
+                $dimensions->add($frameMargin->times(2))->y(),
+            ),
+            // a bar all the way across including
+            // over the 2 sides of the frame
+            str_repeat(
+                '-',
+                $dimensions->add(
+                    $frameMargin->times(2)
+                )->x()
+            )
         );
 
         /** @var Mino $mino */
-        foreach ($this->matrix->minos() as $mino) {
-            $this->drawCharacter($mino->position(), '0');
+        foreach ($this->matrix->minos()->toArray() as $mino) {
+            $this->draw(
+                $mino->position()->add($frameMargin->times(2)),
+                '0'
+            );
         }
     }
 
-    private function renderActiveTetrimino()
+    private function renderTetrimino()
     {
         if ( ! $this->tetrimino) {
             return;
         }
-
-        $minos = $this->tetrimino->minosInMatrixSpace()->translate(Vector::fromInt(2, 2));
+        
+        $minos = $this->tetrimino
+            ->minosInMatrixSpace()
+            ->translate(
+                Vector::fromInt(2, 2)
+            );
 
         /** @var Mino $mino */
         foreach ($minos->toArray() as $mino) {
-            $this->drawCharacter($mino->position(), 'O');
+            $this->draw($mino->position(), 'O');
         }
     }
 
-    private function drawCharacter(Vector $position, string $character): void
+    private function draw(Vector $position, string $text): void
     {
         set_cursor_position(
             $position->y(),
             $position->x(),
         );
-        echo $character;
+        echo $text;
     }
 }

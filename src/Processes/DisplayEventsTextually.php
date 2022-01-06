@@ -25,6 +25,9 @@ final class DisplayEventsTextually implements EventListener
         } elseif ($event instanceof TetriminoWasRotated) {
             $this->display("Tetrimino was rotated {$event->direction->toString()}.");
         } elseif ($event instanceof TetriminoFell) {
+            /*
+             * it's not as interesting to render 'fell' over and over
+             */
             $this->renderLog();
         } else {
             $this->display(get_class($event));
@@ -36,7 +39,6 @@ final class DisplayEventsTextually implements EventListener
         $this->updateLog($text);
         $this->renderLog();
     }
-
 
     private function updateLog(string $text): void
     {
@@ -51,9 +53,6 @@ final class DisplayEventsTextually implements EventListener
         $this->eventLog = array_slice($this->eventLog, -3);
     }
 
-    /**
-     * @return void
-     */
     private function renderLog(): void
     {
         set_cursor_position(

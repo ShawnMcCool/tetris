@@ -53,7 +53,7 @@ final class Matrix
         return new self(
             $this->dimensions,
             $this->minos->add(
-                $tetrimino->minos()
+                $tetrimino->minosInMatrixSpace()
             ),
             $this->spawnPosition
         );

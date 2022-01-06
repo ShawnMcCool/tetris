@@ -19,7 +19,7 @@ class NonBlockingTimer
 
     public function __construct(
         private Clock $clock,
-        private int $intervalSeconds
+        private float $intervalSeconds
     ) {
     }
 
@@ -58,7 +58,7 @@ class NonBlockingTimer
     private function processTick()
     {
         $this->timeOfLastTick = $this->timeOfNextTick();
-
+        
         if ($this->onTickFunction) {
             ($this->onTickFunction)($this->timeOfLastTick);
         }

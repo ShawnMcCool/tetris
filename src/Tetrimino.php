@@ -13,7 +13,7 @@ final class Tetrimino
     {
         return new self(
             $this->minos,
-            $this->position->translate($vector),
+            $this->position->add($vector),
             $this->currentMinoRotationIndex
         );
     }

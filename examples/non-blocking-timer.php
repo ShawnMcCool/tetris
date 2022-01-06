@@ -7,7 +7,7 @@ require 'vendor/autoload.php';
 
 $timer = new NonBlockingTimer(
     new SystemClock(),
-    800
+    0.8
 );
 
 echo "assigning tick function...\n";

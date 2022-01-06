@@ -45,7 +45,8 @@ final class Game
         $this->matrix = $this->matrix->lock($this->tetrimino);
 
         $this->pendingEvents[] = new TetriminoBecameLocked(
-            $this->tetrimino
+            $this->tetrimino,
+            $this->matrix,
         );
 
         $this->tetrimino = null;

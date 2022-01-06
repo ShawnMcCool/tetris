@@ -25,7 +25,7 @@ final class Mino
     public function translate(Vector $vector): self
     {
         return new self(
-            $this->position->translate($vector)
+            $this->position->add($vector)
         );
     }
 }
