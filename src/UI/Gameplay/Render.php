@@ -51,19 +51,38 @@ final class Render implements EventListener
         $dimensions = $this->matrix->dimensions();
 
         set_cursor_position(0, 0);
-        echo str_repeat('#', $dimensions->x() + 2) . "\n";
-        foreach (range(1, $dimensions->y()) as $i) {
-            echo '#' . str_repeat(' ', $dimensions->x()) . "#\n";
-        }
-        echo str_repeat('#', $dimensions->x() + 2) . "\n";
         
+        // draw ceiling
+        $this->drawCharacter(
+            Vector::fromInt(0, 1),
+            str_repeat('-', $dimensions->x() + 2)
+        );
+        
+        // draw left wall
+        foreach (range(2, $dimensions->y()+2) as $i) {
+            $this->drawCharacter(
+                Vector::fromInt(0, $i),
+                '|'
+            );
+        }
+        
+        // draw left wall
+        foreach (range(2, $dimensions->y()+2) as $i) {
+            $this->drawCharacter(
+                Vector::fromInt($dimensions->x()+2, $i),
+                '|'
+            );
+        }
+
+        // draw floor
+        $this->drawCharacter(
+            Vector::fromInt(0,$dimensions->y()+2),
+            str_repeat('-', $dimensions->x() + 2)
+        );
+
         /** @var Mino $mino */
         foreach ($this->matrix->minos() as $mino) {
-            set_cursor_position(
-                $mino->position()->y(),
-                $mino->position()->x(),
-            );
-            echo '0';
+            $this->drawCharacter($mino->position(), '0');
         }
     }
 
@@ -72,17 +91,21 @@ final class Render implements EventListener
         if ( ! $this->tetrimino) {
             return;
         }
-        
+
         $minos = $this->tetrimino->minosInMatrixSpace()->translate(Vector::fromInt(2, 2));
-        
+
         /** @var Mino $mino */
         foreach ($minos->toArray() as $mino) {
-            set_cursor_position(
-                $mino->position()->y(),
-                $mino->position()->x(),
-            );
-            
-            echo 'O';
+            $this->drawCharacter($mino->position(), 'O');
         }
+    }
+
+    private function drawCharacter(Vector $position, string $character): void
+    {
+        set_cursor_position(
+            $position->y(),
+            $position->x(),
+        );
+        echo $character;
     }
 }

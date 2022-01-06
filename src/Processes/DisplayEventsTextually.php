@@ -1,6 +1,7 @@
 <?php namespace Tetris\Processes;
 
 use Tetris\Vector;
+use Tetris\Events\TetriminoFell;
 use Tetris\Events\GameWasStarted;
 use Tetris\Events\TetriminoWasMoved;
 use Tetris\Events\TetriminoWasRotated;
@@ -9,27 +10,57 @@ use function PhAnsi\set_cursor_position;
 
 final class DisplayEventsTextually implements EventListener
 {
+    private const LOG_LENGTH = 3;
+
     private Vector $matrixDimensions;
+    private array $eventLog = [];
 
     function handle($event)
     {
         if ($event instanceof GameWasStarted) {
             $this->matrixDimensions = $event->matrix->dimensions();
-            $this->output("The game started.");
+            $this->display("The game started.");
         } elseif ($event instanceof TetriminoWasMoved) {
-            $this->output("Tetrimino was moved {$event->direction->toString()}.");
+            $this->display("Tetrimino was moved {$event->direction->toString()}.");
         } elseif ($event instanceof TetriminoWasRotated) {
-            $this->output("Tetrimino was rotated {$event->direction->toString()}.");
+            $this->display("Tetrimino was rotated {$event->direction->toString()}.");
+        } elseif ($event instanceof TetriminoFell) {
+            $this->renderLog();
         } else {
-            $this->output(get_class($event));
+            $this->display(get_class($event));
         }
     }
 
-    private function output(string $text): void
+    private function display(string $text): void
+    {
+        $this->updateLog($text);
+        $this->renderLog();
+    }
+
+
+    private function updateLog(string $text): void
+    {
+        /*
+         * append event to log
+         */
+        $this->eventLog[] = $text;
+
+        /*
+         * reduce log to the last N events
+         */
+        $this->eventLog = array_slice($this->eventLog, -3);
+    }
+
+    /**
+     * @return void
+     */
+    private function renderLog(): void
     {
         set_cursor_position(
-            $this->matrixDimensions->y() + 3, 0
+            $this->matrixDimensions->y() + self::LOG_LENGTH,
+            0
         );
-        echo $text;
+
+        echo implode("\n", $this->eventLog);
     }
 }
