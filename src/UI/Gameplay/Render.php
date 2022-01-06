@@ -1,8 +1,9 @@
 <?php namespace Tetris\UI\Gameplay;
 
+use Tetris\Mino;
 use Tetris\Vector;
-use Tetris\Playfield;
-use Tetris\ActiveTetrimino;
+use Tetris\Matrix;
+use Tetris\Tetrimino;
 use Tetris\Events\TetriminoFell;
 use Tetris\Events\GameWasStarted;
 use Tetris\Events\TetriminoWasMoved;
@@ -14,25 +15,25 @@ use function PhAnsi\set_cursor_position;
 
 final class Render implements EventListener
 {
-    private ?Playfield $playfield = null;
-    private ?ActiveTetrimino $activeTetrimino = null;
+    private ?Matrix $matrix = null;
+    private ?Tetrimino $tetrimino = null;
 
     function handle($event)
     {
         if ($event instanceof GameWasStarted) {
-            $this->playfield = $event->matrix();
+            $this->matrix = $event->matrix;
             $this->render();
         } elseif ($event instanceof TetriminoWasSpawned) {
-            $this->activeTetrimino = $event->tetrimino();
+            $this->tetrimino = $event->tetrimino;
             $this->render();
         } elseif ($event instanceof TetriminoFell) {
-            $this->activeTetrimino = $event->tetrimino();
+            $this->tetrimino = $event->tetrimino;
             $this->render();
         } elseif ($event instanceof TetriminoWasRotated) {
-            $this->activeTetrimino = $event->tetrimino();
+            $this->tetrimino = $event->tetrimino;
             $this->render();
         } elseif ($event instanceof TetriminoWasMoved) {
-            $this->activeTetrimino = $event->tetrimino();
+            $this->tetrimino = $event->tetrimino;
             $this->render();
         }
     }
@@ -47,7 +48,7 @@ final class Render implements EventListener
 
     private function renderTheMatrix()
     {
-        $dimensions = $this->playfield->dimensions();
+        $dimensions = $this->matrix->dimensions();
 
         set_cursor_position(0, 0);
         echo str_repeat('#', $dimensions->x() + 2) . "\n";
@@ -55,28 +56,33 @@ final class Render implements EventListener
             echo '#' . str_repeat(' ', $dimensions->x()) . "#\n";
         }
         echo str_repeat('#', $dimensions->x() + 2) . "\n";
+        
+        /** @var Mino $mino */
+        foreach ($this->matrix->minos() as $mino) {
+            set_cursor_position(
+                $mino->position()->y(),
+                $mino->position()->x(),
+            );
+            echo '0';
+        }
     }
 
     private function renderActiveTetrimino()
     {
-        if ( ! $this->activeTetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
-
-        $minoPositions = $this->activeTetrimino->matrix()->minoPositions();
-
-        /** @var Vector $mino */
-        foreach ($minoPositions as $mino) {
-            $minoPosition = $mino
-                ->plus(Vector::fromInt(1, 1))
-                ->plus($this->activeTetrimino->matrixPosition());
-
+        
+        $minos = $this->tetrimino->minosInMatrixSpace()->translate(Vector::fromInt(2, 2));
+        
+        /** @var Mino $mino */
+        foreach ($minos->toArray() as $mino) {
             set_cursor_position(
-                $minoPosition->y(),
-                $minoPosition->x()
+                $mino->position()->y(),
+                $mino->position()->x(),
             );
             
-            echo "I";
+            echo 'O';
         }
     }
 }

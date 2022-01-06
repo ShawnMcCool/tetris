@@ -1,11 +1,11 @@
 <?php namespace Tetris\Events;
 
-use Tetris\ActiveTetrimino;
+use Tetris\Tetrimino;
 
 final class TetriminoBecameLocked
 {
     public function __construct(
-        private ActiveTetrimino $tetrimino
+        public Tetrimino $tetrimino
     ) {
     }
 }

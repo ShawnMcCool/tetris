@@ -23,7 +23,7 @@ final class Vector
         return $this->x == $that->x && $this->y == $that->y;
     }
 
-    public function plus(self $addend): self
+    public function translate(self $addend): self
     {
         return new self(
             $this->x + $addend->x,
@@ -39,5 +39,10 @@ final class Vector
     public static function zero(): self
     {
         return new self(0, 0);
+    }
+
+    public static function down(): self
+    {
+        return new self(0, 1);
     }
 }

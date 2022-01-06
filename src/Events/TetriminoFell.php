@@ -1,16 +1,11 @@
 <?php namespace Tetris\Events;
 
-use Tetris\ActiveTetrimino;
+use Tetris\Tetrimino;
 
 final class TetriminoFell
 {
     public function __construct(
-        private ActiveTetrimino $tetrimino
+        public Tetrimino $tetrimino,
     ) {
-    }
-
-    public function tetrimino(): ActiveTetrimino
-    {
-        return $this->tetrimino;
     }
 }

@@ -30,7 +30,7 @@ it('can sum two vectors', function () {
     expectTrue(
         Vector::fromInt(
             1, 2
-        )->plus(
+        )->translate(
             Vector::fromInt(2, 1)
         )->equals(
             Vector::fromInt(3, 3)

@@ -1,9 +1,11 @@
-<?php namespace Tetris;
+<?php
+
+namespace Tetris;
 
 final class TetriminoBag
 {
     public function draw(): Tetrimino
     {
-        return Tetrimino::I();
+        return Tetrimino::t(Vector::zero());
     }
 }

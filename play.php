@@ -1,7 +1,8 @@
 <?php
 
 use Tetris\Game;
-use Tetris\Playfield;
+use Tetris\Matrix;
+use Tetris\Vector;
 use Tetris\Direction;
 use Tetris\TetriminoBag;
 use Tetris\Time\FrameTimer;
@@ -10,6 +11,7 @@ use Tetris\UI\Gameplay\Render;
 use Tetris\Time\NonBlockingTimer;
 use Tetris\Processes\SpawnNewTetrimino;
 use Tetris\EventDispatch\DispatchEvents;
+use Tetris\Processes\DisplayEventsTextually;
 use Tetris\UI\Input\NonBlockingKeyboardPlayerInput;
 
 require 'vendor/autoload.php';
@@ -18,7 +20,10 @@ require 'vendor/autoload.php';
  * start the game
  */
 $game = Game::start(
-    Playfield::standard(),
+    Matrix::withDimensions(
+        10, 20,
+        Vector::fromInt(5, 0)
+    ),
     new TetriminoBag()
 );
 
@@ -56,15 +61,19 @@ $playerInput = new NonBlockingKeyboardPlayerInput();
  */
 $events = new DispatchEvents(
     [
-        //new DisplayEventsTextually(),
-        new SpawnNewTetrimino($game),
         new Render(),
+        new DisplayEventsTextually(),
+        new SpawnNewTetrimino($game),
     ]
 );
 
 while (true) {
 
-    // player input
+    /*
+     * WASD = left / right controls
+     * 
+     * ;' keys (to the right of L = rotate left / right
+     */
     $pressedKey = $playerInput->pressedKey();
     if ($pressedKey) {
         switch ($pressedKey) {

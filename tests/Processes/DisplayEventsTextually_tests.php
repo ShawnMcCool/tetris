@@ -1,9 +1,7 @@
 <?php
 
 use Tetris\Vector;
-use Tetris\Tetrimino;
 use Tetris\Direction;
-use Tetris\ActiveTetrimino;
 use Tetris\Events\TetriminoWasMoved;
 use Tests\TestDoubles\NumberRecorder;
 use Tetris\Events\TetriminoWasRotated;

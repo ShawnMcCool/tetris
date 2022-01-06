@@ -10,105 +10,108 @@ use Tetris\Events\TetriminoBecameLocked;
 final class Game
 {
     private array $pendingEvents = [];
-    private ?ActiveTetrimino $activeTetrimino = null;
+    private ?Tetrimino $tetrimino = null;
 
     public function __construct(
-        private Playfield $playfield,
+        private Matrix $matrix,
         private TetriminoBag $bag,
     ) {
     }
 
     public function processGravity(): void
     {
-        if ( ! $this->activeTetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
 
-        $newlyPositionedTetrimino = $this->activeTetrimino->downOne();
+        $newlyPositionedTetrimino = $this->tetrimino->translate(
+            Vector::down()
+        );
 
         // if it can fit
-        if ($this->playfield->canFit($newlyPositionedTetrimino)) {
+        if ($this->matrix->canFit($newlyPositionedTetrimino)) {
             // make the change
-            $this->activeTetrimino = $newlyPositionedTetrimino;
+            $this->tetrimino = $newlyPositionedTetrimino;
 
             // 
             $this->pendingEvents[] = new TetriminoFell(
-                $this->activeTetrimino
+                $this->tetrimino
             );
 
             return;
         }
 
-        // otherwise lock it into place
-        $this->playfield->lockTetrimino($this->activeTetrimino);
+        // otherwise, lock it into place
+        $this->matrix = $this->matrix->lock($this->tetrimino);
 
         $this->pendingEvents[] = new TetriminoBecameLocked(
-            $this->activeTetrimino
+            $this->tetrimino
         );
 
-        $this->activeTetrimino = null;
+        $this->tetrimino = null;
     }
 
     public function movePiece(Direction $direction): void
     {
-        if ( ! $this->activeTetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
 
         // actually do the move
-        $newlyPositionedTetrimino = $this->activeTetrimino->translate(
+        $newlyPositionedTetrimino = $this->tetrimino->translate(
             $direction->isLeft()
                 ? Vector::fromInt(-1, 0)
                 : Vector::fromInt(1, 0)
         );
 
-        if ( ! $this->playfield->canFit($newlyPositionedTetrimino)) {
+        if ( ! $this->matrix->canFit($newlyPositionedTetrimino)) {
             return;
         }
 
         // actually make the move
-        $this->activeTetrimino = $newlyPositionedTetrimino;
+        $this->tetrimino = $newlyPositionedTetrimino;
 
         $this->pendingEvents[] = new TetriminoWasMoved(
-            $this->activeTetrimino,
+            $this->tetrimino,
             $direction
         );
     }
 
     public function rotatePiece(Direction $direction): void
     {
-        if ( ! $this->activeTetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
 
-        $newlyRotatedTetrimino = $this->activeTetrimino->rotate($direction);
-        
-        if ( ! $this->playfield->canFit($newlyRotatedTetrimino)) {
+        $newlyRotatedTetrimino = $this->tetrimino->rotate($direction);
+
+        if ( ! $this->matrix->canFit($newlyRotatedTetrimino)) {
             return;
         }
 
         // actually do the rotation
-        $this->activeTetrimino = $newlyRotatedTetrimino;
-        
+        $this->tetrimino = $newlyRotatedTetrimino;
+
         $this->pendingEvents[] = new TetriminoWasRotated(
-            $this->activeTetrimino,
+            $this->tetrimino,
             $direction
         );
     }
 
     public function spawnTetrimino(): void
     {
-        if ($this->activeTetrimino) {
+        if ($this->tetrimino) {
             return;
         }
-        
-        $this->activeTetrimino = new ActiveTetrimino(
-            $this->bag->draw(),
-            $this->playfield->tetriminoSpawnPosition()
-        );
+
+        $this->tetrimino = $this->bag
+            ->draw()
+            ->translate(
+                $this->matrix->spawnPosition()
+            );
 
         $this->pendingEvents[] = new TetriminoWasSpawned(
-            $this->activeTetrimino
+            $this->tetrimino
         );
     }
 
@@ -120,7 +123,7 @@ final class Game
     }
 
     public static function start(
-        Playfield $matrix,
+        Matrix $matrix,
         TetriminoBag $bag
     ): self {
         $game = new self($matrix, $bag);

@@ -3,102 +3,86 @@
 final class Matrix
 {
     private function __construct(
-        private array $matrix
+        private Vector $dimensions,
+        private Minos $minos,
+        private Vector $spawnPosition
     ) {
+    }
+
+    public function canFit(Tetrimino $tetrimino): bool
+    {
+        /*
+         * boundary collisions
+         */
+        $boundaryCollisions = array_filter(
+            $tetrimino->minosInMatrixSpace()->toArray(),
+            function (Mino $mino) {
+                // left wall
+                if ($mino->position()->x() < 0) {
+                    return true;
+                }
+                // right wall
+                if ($mino->position()->x() >= $this->dimensions->x()) {
+                    return true;
+                }
+                // ground
+                if ($mino->position()->y() >= $this->dimensions->y()) {
+                    return true;
+                }
+                return false;
+            }
+        );
+        
+        if ( ! empty($boundaryCollisions)) {
+            return false;
+        }
+        
+        /*
+         * collisions with other minos
+         */
+        $minoCollisions = array_filter(
+            $tetrimino->minosInMatrixSpace()->toArray(),
+            fn(Mino $mino) => $this->minos->hasMino($mino)
+        );
+        
+        return empty($minoCollisions);
+    }
+
+    public function lock(Tetrimino $tetrimino): self
+    {
+        return new self(
+            $this->dimensions,
+            $this->minos->add(
+                $tetrimino->minos()
+            ),
+            $this->spawnPosition
+        );
+    }
+
+    public function minos(): Minos
+    {
+        return $this->minos;
+    }
+
+    public function spawnPosition(): Vector
+    {
+        return $this->spawnPosition;
     }
 
     public function dimensions(): Vector
     {
-        if (empty($this->matrix)) {
-            return Vector::zero();
-        }
-        
-        return Vector::fromInt(
-            count($this->matrix[0]),
-            count($this->matrix)
-        );
-    }
-    
-    public function subset(
-        Vector $topLeft,
-        Vector $bottomRight
-    ): Matrix {
-        /*
-         * [0, 0, 0, 0, 0, 0],
-         * [0, 1, 0, 0, 0, 0],
-         * [0, 0, 0, 0, 0, 0],
-         * [0, 0, 0, 0, 0, 0],
-         * [0, 0, 0, 0, 1, 0],
-         * [0, 0, 0, 0, 0, 0],
-         * 
-         * 1,1 - 4,4
-         */
-        $relevantRows = array_slice($this->matrix, $topLeft->y(), $bottomRight->y() - $topLeft->y());
-
-        $newMatrix = array_map(
-            fn(array $row) => array_slice($row, $topLeft->x(), $bottomRight->x()),
-            $relevantRows
-        );
-
-        return Matrix::fromArray($newMatrix);
+        return $this->dimensions;
     }
 
-    public function minoPositions(): array
-    {
-        $positions = [];
-        
-        foreach ($this->matrix as $rowCount => $rows) {
-            foreach ($rows as $colCount => $space) {
-                if ($space) {
-                    $positions[] = Vector::fromInt($colCount, $rowCount);
-                }
-            }
-        }
-        
-        return $positions;
-    }
-
-    private function hasMinoAt(Vector $position): bool
-    {
-        return
-            isset($this->matrix[$position->y()][$position->x()]) &&
-            $this->matrix[$position->y()][$position->x()] == 1;
-    }
-
-    public function collidesWith(
-        Matrix $invader,
-        Vector $invaderPosition
-    ): bool {
-        // loop through each row in the invader
-        foreach ($invader->minoPositions() as $minoPosition) {
-            
-            $testPosition = $invaderPosition->plus($minoPosition);
-            
-            if ($this->hasMinoAt($testPosition)) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    public static function fromArray(array $matrix): self
-    {
-        return new self($matrix);
-    }
-
-    public static function withDimensions(int $x, int $y): self
-    {
+    public static function withDimensions(
+        int $width,
+        int $height,
+        Vector $spawnPosition
+    ): self {
         return new self(
-        // rows = y
-            array_fill(
-                0,
-                $y,
-                // cols = x
-                array_fill(
-                    0, $x, 0
-                )
-            )
+            Vector::fromInt($width, $height),
+            Minos::empty(),
+            $spawnPosition
         );
     }
 }
