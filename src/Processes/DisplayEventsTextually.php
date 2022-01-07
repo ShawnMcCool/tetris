@@ -10,7 +10,11 @@ use function PhAnsi\set_cursor_position;
 
 final class DisplayEventsTextually implements EventListener
 {
+    /*
+     * magic numbers, yay
+     */
     private const LOG_LENGTH = 3;
+    private const FRAME_MARGINS = 5;
 
     private Vector $matrixDimensions;
     private array $eventLog = [];
@@ -56,7 +60,7 @@ final class DisplayEventsTextually implements EventListener
     private function renderLog(): void
     {
         set_cursor_position(
-            $this->matrixDimensions->y() + self::LOG_LENGTH,
+            $this->matrixDimensions->y() + self::LOG_LENGTH + self::FRAME_MARGINS,
             0
         );
 

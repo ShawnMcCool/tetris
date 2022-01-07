@@ -41,7 +41,7 @@ $frameTimer->start();
 /*
  * gameplay timer
  */
-$gameplayTimer = new NonBlockingTimer($clock, .2);
+$gameplayTimer = new NonBlockingTimer($clock, .5);
 
 $gameplayTimer->onTick(
     function () use ($game) {

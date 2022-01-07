@@ -1,23 +1,36 @@
 <?php namespace Tetris\UI\Gameplay;
 
-use Tetris\Mino;
-use Tetris\Vector;
-use Tetris\Matrix;
-use Tetris\Tetrimino;
-use Tetris\Events\TetriminoFell;
-use Tetris\Events\GameWasStarted;
-use Tetris\Events\TetriminoWasMoved;
-use Tetris\Events\TetriminoWasSpawned;
-use Tetris\Events\TetriminoWasRotated;
 use Tetris\EventDispatch\EventListener;
+use Tetris\Events\GameWasStarted;
 use Tetris\Events\TetriminoBecameLocked;
+use Tetris\Events\TetriminoFell;
+use Tetris\Events\TetriminoWasMoved;
+use Tetris\Events\TetriminoWasRotated;
+use Tetris\Events\TetriminoWasSpawned;
+use Tetris\Matrix;
+use Tetris\Mino;
+use Tetris\Tetrimino;
+use Tetris\Vector;
 use function PhAnsi\clear_screen;
 use function PhAnsi\set_cursor_position;
 
 final class Render implements EventListener
 {
-    private ?Matrix $matrix = null;
-    private ?Tetrimino $tetrimino = null;
+    private Matrix $matrix;
+    private Tetrimino $tetrimino;
+    private Vector $wallMargins;
+    private Vector $matrixPosition;
+
+    public function __construct()
+    {
+        /*
+         * 2 characters of padding on the left, one on the top of the matrix
+         */
+        $this->wallMargins = Vector::fromInt(2, 3);
+        $this->matrixPosition = $this->wallMargins->add(
+            Vector::fromInt(1, 1)
+        );
+    }
 
     function handle($event)
     {
@@ -45,39 +58,52 @@ final class Render implements EventListener
     private function render(): void
     {
         clear_screen();
-        
+
         $this->renderMatrix();
         $this->renderTetrimino();
     }
 
     private function renderMatrix()
     {
+        /*
+         * render is 1 indexed, the top left character is at 1,1
+         */
         $dimensions = $this->matrix->dimensions();
-        $frameMargin = Vector::fromInt(1, 1);
+
+        $ceilingPosition = $this->wallMargins;
+
+        $floorPosition = Vector::fromInt(
+            $this->wallMargins->x(),
+            $this->matrixPosition->add($dimensions)->y(),
+        );
+
+        $rightWallPosition = Vector::fromInt(
+            $this->matrixPosition->add($dimensions)->x(),
+            $this->wallMargins->y(),
+        );
+
+        $leftWallPosition = Vector::fromInt(
+            $this->wallMargins->x(),
+            $this->wallMargins->y(),
+        );
 
         /*
          * ceiling
          */
         $this->draw(
-        // top left of the screen
-            Vector::one(),
+            $ceilingPosition,
             // a bar all the way across including
             // over the 2 sides of the frame
             str_repeat(
                 '-',
-                $dimensions->add(
-                    $frameMargin->times(2)
-                )->x()
+                $dimensions->add($this->wallMargins)->x()
             )
         );
 
         // draw left wall
         foreach (range(1, $dimensions->y()) as $i) {
             $this->draw(
-                Vector::fromInt(
-                    1,
-                    $i + $frameMargin->y()
-                ),
+                $leftWallPosition->add(Vector::fromInt(0, $i)),
                 '|'
             );
         }
@@ -85,35 +111,29 @@ final class Render implements EventListener
         // draw right wall
         foreach (range(1, $dimensions->y()) as $i) {
             $this->draw(
-                Vector::fromInt(
-                    $dimensions->add($frameMargin->times(2))->x(),
-                    $i + $frameMargin->y()
-                ),
+                $rightWallPosition->add(Vector::fromInt(0, $i)),
                 '|'
             );
         }
 
         // draw floor
         $this->draw(
-        // bottom left of the screen
-            Vector::fromInt(
-                0,
-                $dimensions->add($frameMargin->times(2))->y(),
-            ),
+            $floorPosition,
             // a bar all the way across including
             // over the 2 sides of the frame
             str_repeat(
                 '-',
-                $dimensions->add(
-                    $frameMargin->times(2)
-                )->x()
+                $dimensions->add($this->wallMargins)->x()
             )
         );
 
         /** @var Mino $mino */
         foreach ($this->matrix->minos()->toArray() as $mino) {
             $this->draw(
-                $mino->position()->add($frameMargin->times(2)),
+                $mino->position()
+                    ->add(
+                        $this->matrixPosition
+                    ),
                 '0'
             );
         }
@@ -121,14 +141,14 @@ final class Render implements EventListener
 
     private function renderTetrimino()
     {
-        if ( ! $this->tetrimino) {
+        if (!isset($this->tetrimino)) {
             return;
         }
-        
+
         $minos = $this->tetrimino
             ->minosInMatrixSpace()
             ->translate(
-                Vector::fromInt(2, 2)
+                $this->matrixPosition
             );
 
         /** @var Mino $mino */
