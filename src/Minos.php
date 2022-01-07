@@ -4,17 +4,18 @@ final class Minos
 {
     private function __construct(
         private array $minos
-    ) {
+    )
+    {
     }
 
     public function add(Minos $minos): self
     {
         $newMinos = $this->minos;
-        
+
         foreach ($minos->toArray() as $mino) {
             $newMinos[] = $mino;
         }
-        
+
         return new self(
             $newMinos
         );
@@ -35,17 +36,19 @@ final class Minos
         if (count($this->minos) != count($that->minos)) {
             return false;
         }
-        
+
+        $arrayOfFoundMinos = [];
+
         /** @var Mino $mino */
         foreach ($this->minos as $i => $mino) {
-            if ( ! $mino->equals($that->minos[$i])) {
-                return false;
+            if ($that->hasMino($mino)) {
+                $arrayOfFoundMinos[] = $that;
             }
         }
-        
-        return true;
+
+        return count($arrayOfFoundMinos) == count($that->minos);
     }
-    
+
     public function translate(Vector $vector): self
     {
         return new self(
@@ -54,6 +57,11 @@ final class Minos
                 $this->minos
             )
         );
+    }
+
+    public function count(): int
+    {
+        return count($this->minos);
     }
 
     public function hasMino(Mino $needle): bool
@@ -70,5 +78,41 @@ final class Minos
     public static function empty(): self
     {
         return new self([]);
+    }
+
+    public function filter(callable $f): self
+    {
+        return new self(
+            array_filter($this->minos, $f)
+        );
+    }
+
+    public function map(callable $f): self
+    {
+        return new self(
+            array_map($f, $this->minos)
+        );
+    }
+
+    public function clone(): self
+    {
+        return new self($this->minos);
+    }
+
+    public function countOfMinosInRow(int $rowNumber): int
+    {
+        return $this->filter(
+            fn(Mino $mino) => $mino->position()->y() == $rowNumber
+        )->count();
+    }
+
+    public function nextRowAboveWithMinos(int $clearedRowNumber): ?int
+    {
+        foreach (range($clearedRowNumber - 1, 0) as $rowNumberToCheck) {
+            if ($this->countOfMinosInRow($rowNumberToCheck) > 0) {
+                return $rowNumberToCheck;
+            }
+        }
+        return null;
     }
 }

@@ -6,6 +6,6 @@ final class TetriminoBag
 {
     public function draw(): Tetrimino
     {
-        return Tetrimino::t(Vector::zero());
+        return Tetrimino::i(Vector::zero());
     }
 }

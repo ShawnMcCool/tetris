@@ -2,6 +2,7 @@
 
 use Tetris\EventDispatch\EventListener;
 use Tetris\Events\GameWasStarted;
+use Tetris\Events\LinesWereCleared;
 use Tetris\Events\TetriminoBecameLocked;
 use Tetris\Events\TetriminoFell;
 use Tetris\Events\TetriminoWasMoved;
@@ -50,6 +51,9 @@ final class Render implements EventListener
             $this->tetrimino = $event->tetrimino;
             $this->render();
         } elseif ($event instanceof TetriminoBecameLocked) {
+            $this->matrix = $event->resultingMatrix;
+            $this->render();
+        } elseif ($event instanceof LinesWereCleared) {
             $this->matrix = $event->resultingMatrix;
             $this->render();
         }

@@ -84,4 +84,38 @@ final class Tetrimino
             0
         );
     }
+
+    public static function i(Vector $position): self
+    {
+        return new self(
+            [
+                Minos::fromList(
+                    Mino::at(Vector::fromInt(0, 1)),
+                    Mino::at(Vector::fromInt(1, 1)),
+                    Mino::at(Vector::fromInt(2, 1)),
+                    Mino::at(Vector::fromInt(3, 1)),
+                ),
+                Minos::fromList(
+                    Mino::at(Vector::fromInt(2, 0)),
+                    Mino::at(Vector::fromInt(2, 1)),
+                    Mino::at(Vector::fromInt(2, 2)),
+                    Mino::at(Vector::fromInt(2, 3)),
+                ),
+                Minos::fromList(
+                    Mino::at(Vector::fromInt(0, 2)),
+                    Mino::at(Vector::fromInt(1, 2)),
+                    Mino::at(Vector::fromInt(2, 2)),
+                    Mino::at(Vector::fromInt(3, 2)),
+                ),
+                Minos::fromList(
+                    Mino::at(Vector::fromInt(1, 0)),
+                    Mino::at(Vector::fromInt(1, 1)),
+                    Mino::at(Vector::fromInt(1, 2)),
+                    Mino::at(Vector::fromInt(1, 3)),
+                ),
+            ],
+            $position,
+            0
+        );
+    }
 }

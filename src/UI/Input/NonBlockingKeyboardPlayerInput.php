@@ -1,5 +1,7 @@
 <?php namespace Tetris\UI\Input;
 
+use Tetris\EventDispatch\DispatchEvents;
+
 final class NonBlockingKeyboardPlayerInput
 {
     private $stdin;
@@ -7,7 +9,9 @@ final class NonBlockingKeyboardPlayerInput
     /**
      * It's true that this is very global, I'm ok with it.
      */
-    public function __construct()
+    public function __construct(
+        private DispatchEvents $events
+    )
     {
         readline_callback_handler_install('', fn() => null);
         $this->stdin = fopen('php://stdin', 'r');
@@ -19,6 +23,12 @@ final class NonBlockingKeyboardPlayerInput
         fclose($this->stdin);
     }
 
+    public function check(): void
+    {
+        $key = $this->pressedKey();
+
+        $this->events->dispatch([]);
+    }
     public function pressedKey(): string|null
     {
         $readStreams = [$this->stdin];

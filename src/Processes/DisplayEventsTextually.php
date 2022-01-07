@@ -14,7 +14,7 @@ final class DisplayEventsTextually implements EventListener
      * magic numbers, yay
      */
     private const LOG_LENGTH = 3;
-    private const FRAME_MARGINS = 5;
+    private const FRAME_MARGINS = 3;
 
     private Vector $matrixDimensions;
     private array $eventLog = [];

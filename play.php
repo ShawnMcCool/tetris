@@ -41,7 +41,7 @@ $frameTimer->start();
 /*
  * gameplay timer
  */
-$gameplayTimer = new NonBlockingTimer($clock, .5);
+$gameplayTimer = new NonBlockingTimer($clock, .2);
 
 $gameplayTimer->onTick(
     function () use ($game) {
@@ -50,11 +50,6 @@ $gameplayTimer->onTick(
 );
 
 $gameplayTimer->start();
-
-/*
- * player input
- */
-$playerInput = new NonBlockingKeyboardPlayerInput();
 
 /*
  * processes
@@ -66,6 +61,11 @@ $events = new DispatchEvents(
         new SpawnNewTetrimino($game),
     ]
 );
+
+/*
+ * player input
+ */
+$playerInput = new NonBlockingKeyboardPlayerInput($events);
 
 while (true) {
 

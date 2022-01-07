@@ -1,5 +1,6 @@
 <?php namespace Tetris;
 
+use Tetris\Events\LinesWereCleared;
 use Tetris\Events\TetriminoFell;
 use Tetris\Events\GameWasStarted;
 use Tetris\Events\TetriminoWasMoved;
@@ -50,6 +51,23 @@ final class Game
         );
 
         $this->tetrimino = null;
+
+        // check if there are line clears
+
+        if ($this->matrix->canClearLines()) {
+            $linesToClear = $this->matrix->linesToClear();
+            $this->matrix = $this->matrix->clearLines();
+
+            $this->pendingEvents[] = new LinesWereCleared(
+                $linesToClear,
+                $this->matrix
+            );
+        }
+        /*
+        - does any row have x minos (x = full width)
+        - remove all minos in that row
+        - one by one drop rows
+        */
     }
 
     public function movePiece(Direction $direction): void

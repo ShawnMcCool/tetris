@@ -4,9 +4,10 @@ final class Matrix
 {
     private function __construct(
         private Vector $dimensions,
-        private Minos $minos,
+        private Minos  $minos,
         private Vector $spawnPosition
-    ) {
+    )
+    {
     }
 
     public function canFit(Tetrimino $tetrimino): bool
@@ -32,11 +33,11 @@ final class Matrix
                 return false;
             }
         );
-        
-        if ( ! empty($boundaryCollisions)) {
+
+        if (!empty($boundaryCollisions)) {
             return false;
         }
-        
+
         /*
          * collisions with other minos
          */
@@ -44,7 +45,7 @@ final class Matrix
             $tetrimino->minosInMatrixSpace()->toArray(),
             fn(Mino $mino) => $this->minos->hasMino($mino)
         );
-        
+
         return empty($minoCollisions);
     }
 
@@ -75,14 +76,76 @@ final class Matrix
     }
 
     public static function withDimensions(
-        int $width,
-        int $height,
+        int    $width,
+        int    $height,
         Vector $spawnPosition
-    ): self {
+    ): self
+    {
         return new self(
             Vector::fromInt($width, $height),
             Minos::empty(),
             $spawnPosition
+        );
+    }
+
+    public function canClearLines(): bool
+    {
+        return !empty($this->linesToClear());
+    }
+
+    public function linesToClear(): array
+    {
+        $linesToClear = [];
+
+        // foreach row
+        foreach (range(0, $this->dimensions()->y()) as $rowNumber) {
+            // is the row full of minos?
+            if ($this->minos->countOfMinosInRow($rowNumber) == $this->dimensions->x()) {
+                $linesToClear[] = $rowNumber;
+            }
+        }
+
+        return $linesToClear;
+    }
+
+    public function clearLines(): self
+    {
+        // 1. remove all minos in the cleared lines
+        $clearedRows = $this->linesToClear();
+
+        $this->minos = $this->minos->filter(
+            fn(Mino $mino) => !in_array($mino->position()->y(), $clearedRows)
+        );
+
+        $newMinos = $this->minos()->clone();
+
+        // 2. starting with the furthest row down (highest y value)
+        foreach (range($this->dimensions()->y() - 1, 0) as $rowNumber) {
+            // if the row is empty
+            if ($newMinos->countOfMinosInRow($rowNumber) == 0) {
+                // move the first line above it into the empty row
+                $firstRowAboveWithMinos = $newMinos->nextRowAboveWithMinos($rowNumber);
+
+                if (is_null($firstRowAboveWithMinos)) {
+                    return new Matrix(
+                        $this->dimensions,
+                        $newMinos,
+                        $this->spawnPosition
+                    );
+                }
+
+                $newMinos = $newMinos->map(
+                    fn(Mino $mino) => $mino->position()->y() == $firstRowAboveWithMinos
+                        ? Mino::at(Vector::fromInt($mino->position()->x(), $rowNumber))
+                        : $mino
+                );
+            }
+        }
+
+        return new Matrix(
+            $this->dimensions,
+            $newMinos,
+            $this->spawnPosition
         );
     }
 }
