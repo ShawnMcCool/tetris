@@ -6,7 +6,6 @@ use Tetris\Minos;
 use Tetris\Vector;
 use Tetris\Matrix;
 use Tetris\Tetrimino;
-use Tetris\ShapeName;
 use function Thermage\canvas;
 use function PhAnsi\set_cursor_position;
 
@@ -21,6 +20,7 @@ final class AnsiDisplay
         private Vector $padding,
         private Vector $wallThickness,
         private Closure $wallShader,
+        private TetriminoColors $colors,
     ) {
         $this->totalSize = $this->padding
             ->add($this->wallThickness->times(2))
@@ -34,7 +34,7 @@ final class AnsiDisplay
         ?Tetrimino $tetrimino,
     ): void {
         $this->clearRenderMatrix();
-        
+
         // update the render matrix
         $this->blitWalls();
         $this->blitMinos($matrix->minos());
@@ -141,23 +141,9 @@ final class AnsiDisplay
         foreach ($minos->toArray() as $mino) {
             $this->blitPixel(
                 $this->matrixPosition->add($mino->position()),
-                $this->colorForShape($mino->shapeName()),
+                $this->colors->forShape($mino->shapeName()),
             );
         }
-    }
-
-    private function colorForShape(ShapeName $shapeName): string
-    {
-        return match ($shapeName->toString()) {
-            'i' => 'bright-blue',
-            't' => 'magenta',
-            'j' => 'blue',
-            'l' => 'bright-red',
-            'o' => 'yellow',
-            's' => 'green',
-            'z' => 'red',
-            default => 'gray',
-        };
     }
 
     public static function withConfiguration(
@@ -165,12 +151,14 @@ final class AnsiDisplay
         ?Vector $wallThickness = null,
         ?Vector $padding = null,
         ?Closure $wallShader = null,
+        ?TetriminoColors $color = null,
     ): self {
         return new self(
             $size,
             $wallThickness ?? Vector::one(),
             $padding ?? Vector::one(),
             $wallShader ?? fn($x) => $x,
+            $color ?? new BasicTetriminoColors
         );
     }
 }
