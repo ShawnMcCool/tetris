@@ -2,6 +2,7 @@
 
 use Closure;
 use Tetris\Mino;
+use Tetris\Minos;
 use Tetris\Vector;
 use Tetris\Matrix;
 use Tetris\Tetrimino;
@@ -36,10 +37,10 @@ final class AnsiDisplay
         
         // update the render matrix
         $this->blitWalls();
-        $this->blitMatrix($matrix);
+        $this->blitMinos($matrix->minos());
 
         if ($tetrimino) {
-            $this->blitTetrimino($tetrimino);
+            $this->blitMinos($tetrimino->minosInMatrixSpace());
         }
 
         // render to the terminal
@@ -134,21 +135,10 @@ final class AnsiDisplay
         $this->renderMatrix[$position->y()][$position->x()] = $color;
     }
 
-    private function blitTetrimino(Tetrimino $tetrimino): void
+    private function blitMinos(Minos $minos): void
     {
         /** @var Mino $mino */
-        foreach ($tetrimino->minosInMatrixSpace()->toArray() as $mino) {
-            $this->blitPixel(
-                $this->matrixPosition->add($mino->position()),
-                $this->colorForShape($mino->shapeName()),
-            );
-        }
-    }
-
-    private function blitMatrix(Matrix $matrix): void
-    {
-        /** @var Mino $mino */
-        foreach ($matrix->minos()->toArray() as $mino) {
+        foreach ($minos->toArray() as $mino) {
             $this->blitPixel(
                 $this->matrixPosition->add($mino->position()),
                 $this->colorForShape($mino->shapeName()),
