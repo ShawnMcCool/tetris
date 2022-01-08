@@ -4,7 +4,10 @@
     "autoload": {
         "psr-4": {
             "Tetris\\": "src/"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -19,6 +22,7 @@
     ],
     "require": {
       "ext-readline": "*",
-        "shawnmccool/phansi": "^0.0.1"
+        "shawnmccool/phansi": "^0.0.1",
+        "thermage/thermage": "^0.15.2"
     }
 }

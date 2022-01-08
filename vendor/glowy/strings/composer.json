@@ -1,0 +1,39 @@
+{
+    "name": "glowy/strings",
+    "description": "Strings Component provide a fluent, object-oriented interface for working with multibyte string, allowing you to chain multiple string operations together using a more readable syntax compared to traditional PHP strings functions.",
+    "license": "MIT",
+    "keywords": [
+        "Strings", "strings", "php-strings", "php", "glowy", "glowyphp", "strings-manipulation"
+    ],
+    "support": {
+      "source": "https://github.com/glowyphp/strings",
+      "issues": "https://github.com/glowyphp/strings/issues"
+    },
+    "authors": [
+        {
+            "name": "Sergey Romanenko",
+            "email": "sergey.romanenko@flextype.org",
+            "homepage": "https://github.com/Awilum"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "glowy/macroable": "^3.0"
+    },
+    "autoload":{
+        "psr-4": {
+            "Glowy\\Strings\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "require-dev": {
+        "doctrine/coding-standard": "9.0.0",
+        "pestphp/pest": "^1.21.1",
+        "phpstan/phpstan": "^1.2.0",
+        "symfony/var-dumper": "^5.4.0"
+    }
+}

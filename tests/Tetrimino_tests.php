@@ -1,13 +1,14 @@
 <?php
 
 use Tetris\Vector;
+use Tetris\UI\Shape;
 use function Tests\it;
 use function Tests\expectTrue;
 use function Tests\expectFalse;
 
 it('can return minos translated to matrix space', function () {
     
-    $tetrimino = \Tetris\Tetrimino::t();
+    $tetrimino = \Tetris\Tetrimino::withShape(Shape::t());
 
     $minos = $tetrimino->minos();
     

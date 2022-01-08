@@ -1,21 +1,21 @@
-<?php namespace Tetris\UI\Gameplay;
+<?php namespace Tetris\UI\Display;
 
-use Tetris\EventDispatch\EventListener;
+use Tetris\Mino;
+use Tetris\Matrix;
+use Tetris\Vector;
+use Tetris\Tetrimino;
+use Tetris\Events\TetriminoFell;
 use Tetris\Events\GameWasStarted;
 use Tetris\Events\LinesWereCleared;
-use Tetris\Events\TetriminoBecameLocked;
-use Tetris\Events\TetriminoFell;
 use Tetris\Events\TetriminoWasMoved;
 use Tetris\Events\TetriminoWasRotated;
 use Tetris\Events\TetriminoWasSpawned;
-use Tetris\Matrix;
-use Tetris\Mino;
-use Tetris\Tetrimino;
-use Tetris\Vector;
+use Tetris\EventDispatch\EventListener;
+use Tetris\Events\TetriminoBecameLocked;
 use function PhAnsi\clear_screen;
 use function PhAnsi\set_cursor_position;
 
-final class Render implements EventListener
+final class RenderWithCharacters implements EventListener
 {
     private Matrix $matrix;
     private Tetrimino $tetrimino;

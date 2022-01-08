@@ -1,0 +1,44 @@
+{
+    "name": "thermage/thermage",
+    "description": "Thermage provides a fluent and incredibly powerful object-oriented interface for customizing CLI output text color, background, formatting, theming and more.",
+    "license": "MIT",
+    "keywords": [
+        "Thermage", "console", "cli", "console-colors", "console-tool", "terminal", "terminal-colors", "ansi-colors"
+    ],
+    "support": {
+      "source": "https://github.com/thermage/thermage",
+      "issues": "https://github.com/thermage/thermage/issues"
+    },
+    "authors": [
+        {
+            "name": "Sergey Romanenko",
+            "email": "sergey.romanenko@flextype.org",
+            "homepage": "https://awilum.github.io"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-mbstring": "*",
+        "glowy/arrays": "^4.0.0",
+        "glowy/strings": "^4.0.0",
+        "glowy/macroable": "^3.0",
+        "thunderer/shortcode": "^0.7.4"
+    },
+    "autoload":{
+        "psr-4": {
+            "Thermage\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "bin": [
+        "bin/thermage"
+    ],
+    "require-dev": {
+        "doctrine/coding-standard": "9.0.0",
+        "pestphp/pest": "^1.21.1",
+        "phpstan/phpstan": "^1.2.0",
+        "symfony/var-dumper": "^5.4.1"
+    }
+}

@@ -7,12 +7,18 @@ namespace Composer\Autoload;
 class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
 {
     public static $files = array (
+        'a5a637df5137b0db1f1a153cc43b90a6' => __DIR__ . '/..' . '/glowy/arrays/src/helpers.php',
+        '530fb0ecc852c2a46a3a92285667cf82' => __DIR__ . '/..' . '/glowy/strings/src/helpers.php',
         '872c44ae2fa5f07d10e3701bc20e2ffe' => __DIR__ . '/..' . '/shawnmccool/phansi/src/functions.php',
+        '373e609481462f3e05644d14f78adf4f' => __DIR__ . '/..' . '/thermage/thermage/src/helpers.php',
+        '118f4723580056b25e319d6854a7b687' => __DIR__ . '/../..' . '/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'T' => 
         array (
+            'Thunder\\Shortcode\\' => 18,
+            'Thermage\\' => 9,
             'Tetris\\' => 7,
             'Tests\\' => 6,
         ),
@@ -20,9 +26,23 @@ class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
         array (
             'PhAnsi\\' => 7,
         ),
+        'G' => 
+        array (
+            'Glowy\\Strings\\' => 14,
+            'Glowy\\Macroable\\' => 16,
+            'Glowy\\Arrays\\' => 13,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Thunder\\Shortcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thunderer/shortcode/src',
+        ),
+        'Thermage\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/thermage/thermage/src',
+        ),
         'Tetris\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
@@ -34,6 +54,18 @@ class ComposerStaticInit2ac2191e22bf7055321a673d40cd397e
         'PhAnsi\\' => 
         array (
             0 => __DIR__ . '/..' . '/shawnmccool/phansi/src',
+        ),
+        'Glowy\\Strings\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/glowy/strings/src',
+        ),
+        'Glowy\\Macroable\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/glowy/macroable/src',
+        ),
+        'Glowy\\Arrays\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/glowy/arrays/src',
         ),
     );
 

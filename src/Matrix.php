@@ -4,10 +4,9 @@ final class Matrix
 {
     private function __construct(
         private Vector $dimensions,
-        private Minos  $minos,
+        private Minos $minos,
         private Vector $spawnPosition
-    )
-    {
+    ) {
     }
 
     public function canFit(Tetrimino $tetrimino): bool
@@ -34,7 +33,7 @@ final class Matrix
             }
         );
 
-        if (!empty($boundaryCollisions)) {
+        if ( ! empty($boundaryCollisions)) {
             return false;
         }
 
@@ -75,22 +74,9 @@ final class Matrix
         return $this->dimensions;
     }
 
-    public static function withDimensions(
-        int    $width,
-        int    $height,
-        Vector $spawnPosition
-    ): self
-    {
-        return new self(
-            Vector::fromInt($width, $height),
-            Minos::empty(),
-            $spawnPosition
-        );
-    }
-
     public function canClearLines(): bool
     {
-        return !empty($this->linesToClear());
+        return ! empty($this->linesToClear());
     }
 
     public function linesToClear(): array
@@ -114,7 +100,7 @@ final class Matrix
         $clearedRows = $this->linesToClear();
 
         $this->minos = $this->minos->filter(
-            fn(Mino $mino) => !in_array($mino->position()->y(), $clearedRows)
+            fn(Mino $mino) => ! in_array($mino->position()->y(), $clearedRows)
         );
 
         $newMinos = $this->minos()->clone();
@@ -136,7 +122,7 @@ final class Matrix
 
                 $newMinos = $newMinos->map(
                     fn(Mino $mino) => $mino->position()->y() == $firstRowAboveWithMinos
-                        ? Mino::at(Vector::fromInt($mino->position()->x(), $rowNumber))
+                        ? Mino::at(Vector::fromInt($mino->position()->x(), $rowNumber), $mino->shapeName())
                         : $mino
                 );
             }
@@ -146,6 +132,18 @@ final class Matrix
             $this->dimensions,
             $newMinos,
             $this->spawnPosition
+        );
+    }
+
+    public static function withDimensions(
+        int $width,
+        int $height,
+        Vector $spawnPosition
+    ): self {
+        return new self(
+            Vector::fromInt($width, $height),
+            Minos::empty(),
+            $spawnPosition
         );
     }
 }

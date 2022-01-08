@@ -6,5 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'a5a637df5137b0db1f1a153cc43b90a6' => $vendorDir . '/glowy/arrays/src/helpers.php',
+    '530fb0ecc852c2a46a3a92285667cf82' => $vendorDir . '/glowy/strings/src/helpers.php',
     '872c44ae2fa5f07d10e3701bc20e2ffe' => $vendorDir . '/shawnmccool/phansi/src/functions.php',
+    '373e609481462f3e05644d14f78adf4f' => $vendorDir . '/thermage/thermage/src/helpers.php',
+    '118f4723580056b25e319d6854a7b687' => $baseDir . '/src/functions.php',
 );

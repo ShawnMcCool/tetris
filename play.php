@@ -3,12 +3,13 @@
 use Tetris\Game;
 use Tetris\Matrix;
 use Tetris\Vector;
+use Tetris\SevenBag;
 use Tetris\Direction;
 use Tetris\TetriminoBag;
 use Tetris\Time\FrameTimer;
 use Tetris\Time\SystemClock;
-use Tetris\UI\Gameplay\Render;
 use Tetris\Time\NonBlockingTimer;
+use Tetris\Processes\RenderWithCanvas;
 use Tetris\Processes\SpawnNewTetrimino;
 use Tetris\EventDispatch\DispatchEvents;
 use Tetris\Processes\DisplayEventsTextually;
@@ -24,7 +25,7 @@ $game = Game::start(
         10, 20,
         Vector::fromInt(5, 0)
     ),
-    new TetriminoBag()
+    new SevenBag()
 );
 
 /*
@@ -56,7 +57,7 @@ $gameplayTimer->start();
  */
 $events = new DispatchEvents(
     [
-        new Render(),
+        new RenderWithCanvas(),
         new DisplayEventsTextually(),
         new SpawnNewTetrimino($game),
     ]

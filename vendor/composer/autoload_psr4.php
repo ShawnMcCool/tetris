@@ -6,7 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Thunder\\Shortcode\\' => array($vendorDir . '/thunderer/shortcode/src'),
+    'Thermage\\' => array($vendorDir . '/thermage/thermage/src'),
     'Tetris\\' => array($baseDir . '/src'),
     'Tests\\' => array($baseDir . '/tests'),
     'PhAnsi\\' => array($vendorDir . '/shawnmccool/phansi/src'),
+    'Glowy\\Strings\\' => array($vendorDir . '/glowy/strings/src'),
+    'Glowy\\Macroable\\' => array($vendorDir . '/glowy/macroable/src'),
+    'Glowy\\Arrays\\' => array($vendorDir . '/glowy/arrays/src'),
 );

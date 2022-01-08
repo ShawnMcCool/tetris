@@ -2,10 +2,7 @@
 
 namespace Tetris;
 
-final class TetriminoBag
+interface TetriminoBag
 {
-    public function draw(): Tetrimino
-    {
-        return Tetrimino::i(Vector::zero());
-    }
+    function draw(): Tetrimino;
 }

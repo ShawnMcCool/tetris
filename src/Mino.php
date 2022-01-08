@@ -3,7 +3,8 @@
 final class Mino
 {
     private function __construct(
-        private Vector $position
+        private Vector $position,
+        private ShapeName $shapeName,
     ) {
     }
 
@@ -12,9 +13,14 @@ final class Mino
         return $this->position;
     }
 
-    public static function at(Vector $position): self
+    public function shapeName(): ShapeName
     {
-        return new self($position);
+        return $this->shapeName;
+    }
+    
+    public static function at(Vector $position, ?ShapeName $shapeName): self
+    {
+        return new self($position, $shapeName ?? ShapeName::none());
     }
 
     public function equals(self $that): bool
@@ -25,7 +31,8 @@ final class Mino
     public function translate(Vector $vector): self
     {
         return new self(
-            $this->position->add($vector)
+            $this->position->add($vector),
+            $this->shapeName,
         );
     }
 }
