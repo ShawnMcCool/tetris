@@ -1,10 +1,6 @@
-<?php namespace Tetris\UI;
+<?php namespace Tetris;
 
 use Exception;
-use Tetris\Mino;
-use Tetris\Minos;
-use Tetris\Vector;
-use Tetris\ShapeName;
 
 final class Shape
 {

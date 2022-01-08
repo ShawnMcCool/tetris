@@ -1,7 +1,5 @@
 <?php namespace Tetris;
 
-use Tetris\UI\Shape;
-
 final class Tetrimino
 {
     public function __construct(

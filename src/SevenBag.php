@@ -1,7 +1,5 @@
 <?php namespace Tetris;
 
-use Tetris\UI\Shape;
-
 final class SevenBag implements TetriminoBag
 {
     private array $bag;

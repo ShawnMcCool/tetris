@@ -1,7 +1,7 @@
 <?php
 
+use Tetris\Shape;
 use Tetris\Vector;
-use Tetris\UI\Shape;
 use function Tests\it;
 use function Tests\expectTrue;
 use function Tests\expectFalse;
