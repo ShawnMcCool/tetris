@@ -158,7 +158,7 @@ final class AnsiDisplay
             $wallThickness ?? Vector::one(),
             $padding ?? Vector::one(),
             $wallShader ?? fn($x) => $x,
-            $color ?? new BasicTetriminoColors
+            $color ?? new TerminalSpecificTetriminoColors()
         );
     }
 }
