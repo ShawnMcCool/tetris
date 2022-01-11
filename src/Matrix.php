@@ -42,7 +42,7 @@ final class Matrix
          */
         $minoCollisions = array_filter(
             $tetrimino->minosInMatrixSpace()->toArray(),
-            fn(Mino $mino) => $this->minos->hasMino($mino)
+            fn(Mino $mino) => $this->minos->hasMinoSharingAPositionWith($mino)
         );
 
         return empty($minoCollisions);
@@ -110,7 +110,7 @@ final class Matrix
             // if the row is empty
             if ($newMinos->countOfMinosInRow($rowNumber) == 0) {
                 // move the first line above it into the empty row
-                $firstRowAboveWithMinos = $newMinos->nextRowAboveWithMinos($rowNumber);
+                $firstRowAboveWithMinos = $newMinos->nearestRowAboveContainingMinos($rowNumber);
 
                 if (is_null($firstRowAboveWithMinos)) {
                     return new Matrix(

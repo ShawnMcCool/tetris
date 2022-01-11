@@ -4,8 +4,7 @@ final class Minos
 {
     private function __construct(
         private array $minos
-    )
-    {
+    ) {
     }
 
     public function add(Minos $minos): self
@@ -21,11 +20,9 @@ final class Minos
         );
     }
 
-    public static function fromList(Mino ...$minos): self
-    {
-        return new self($minos);
-    }
-
+    /**
+     * @return array<Mino>
+     */
     public function toArray(): array
     {
         return $this->minos;
@@ -41,7 +38,7 @@ final class Minos
 
         /** @var Mino $mino */
         foreach ($this->minos as $i => $mino) {
-            if ($that->hasMino($mino)) {
+            if ($that->hasMinoSharingAPositionWith($mino)) {
                 $arrayOfFoundMinos[] = $that;
             }
         }
@@ -64,20 +61,15 @@ final class Minos
         return count($this->minos);
     }
 
-    public function hasMino(Mino $needle): bool
+    public function hasMinoSharingAPositionWith(Mino $needle): bool
     {
         /** @var Mino $mino */
         foreach ($this->minos as $mino) {
-            if ($mino->equals($needle)) {
+            if ($mino->sharesAPositionWith($needle)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public static function empty(): self
-    {
-        return new self([]);
     }
 
     public function filter(callable $f): self
@@ -89,9 +81,7 @@ final class Minos
 
     public function map(callable $f): self
     {
-        return new self(
-            array_map($f, $this->minos)
-        );
+        return self::fromList(...array_map($f, $this->minos));
     }
 
     public function clone(): self
@@ -106,7 +96,7 @@ final class Minos
         )->count();
     }
 
-    public function nextRowAboveWithMinos(int $clearedRowNumber): ?int
+    public function nearestRowAboveContainingMinos(int $clearedRowNumber): ?int
     {
         foreach (range($clearedRowNumber - 1, 0) as $rowNumberToCheck) {
             if ($this->countOfMinosInRow($rowNumberToCheck) > 0) {
@@ -114,5 +104,15 @@ final class Minos
             }
         }
         return null;
+    }
+
+    public static function fromList(Mino ...$minos): self
+    {
+        return new self($minos);
+    }
+
+    public static function empty(): self
+    {
+        return new self([]);
     }
 }

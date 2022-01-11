@@ -23,7 +23,7 @@ final class Mino
         return new self($position, $shapeName ?? ShapeName::none());
     }
 
-    public function equals(self $that): bool
+    public function sharesAPositionWith(self $that): bool
     {
         return $this->position->equals($that->position);
     }
