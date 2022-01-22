@@ -8,6 +8,7 @@ The main branch is the most up-to-date. There are branches marking the endpoints
 - [End of Stream 2](https://github.com/ShawnMcCool/tetris/tree/end-of-stream-2)
 - [End of Stream 3](https://github.com/ShawnMcCool/tetris/tree/end-of-stream-3)
 - [End of Stream 4](https://github.com/ShawnMcCool/tetris/tree/end-of-stream-4)
+- [End of Stream 5](https://github.com/ShawnMcCool/tetris/tree/end-of-stream-5)
 
 ## How to Run
 
