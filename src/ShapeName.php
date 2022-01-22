@@ -12,6 +12,11 @@ final class ShapeName
         return $this->name;
     }
 
+    public static function gameOver(): self
+    {
+        return new self('game over');
+    }
+    
     public static function none(): self
     {
         return new self('none');

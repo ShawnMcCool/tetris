@@ -1,12 +1,15 @@
 <?php namespace Tetris\Processes;
 
+use Tetris\Mino;
 use Tetris\Matrix;
 use Tetris\Tetrimino;
+use Tetris\ShapeName;
 use Tetris\Events\TetriminoFell;
 use Tetris\Events\GameWasStarted;
 use Tetris\UI\Display\AnsiDisplay;
 use Tetris\Events\LinesWereCleared;
 use Tetris\Events\TetriminoWasMoved;
+use Tetris\Events\PlayerLostTheGame;
 use Tetris\Events\GameLevelIncreased;
 use Tetris\Events\TetriminoWasRotated;
 use Tetris\Events\TetriminoWasSpawned;
@@ -58,6 +61,14 @@ final class RenderWithCanvas implements EventListener
             $this->render();
         } elseif ($event instanceof GameLevelIncreased) {
             $this->level = $event->newLevel;
+        } elseif ($event instanceof PlayerLostTheGame) {
+            $this->display->render(
+                $this->matrix->fillMinosWithShape(ShapeName::gameOver()),
+                $this->tetrimino ?? null,
+                $this->nextTetrimino,
+                $this->score,
+                $this->level
+            );
         }
     }
 

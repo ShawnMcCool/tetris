@@ -146,4 +146,13 @@ final class Matrix
             $spawnPosition
         );
     }
+
+    public function fillMinosWithShape(ShapeName $name): self
+    {
+        return new self(
+            $this->dimensions,
+            $this->minos->withNewShapeName($name),
+            $this->spawnPosition
+        );
+    }
 }

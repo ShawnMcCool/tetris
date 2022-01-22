@@ -36,6 +36,28 @@ final class AnsiDisplay
         $this->nextMinoTranslation = Vector::fromInt(12, 3);
     }
 
+    public function renderGameOverMatrix(
+        Matrix $matrix,
+        ?Tetrimino $tetrimino,
+        ?Tetrimino $nextTetrimino,
+        int $score,
+        int $level
+    ): void {
+        $this->clearRenderMatrix();
+
+        // update the render matrix
+        $this->blitWalls();
+        
+        $this->blitMinos(
+            $matrix->minos()->withNewShapeName(
+                ShapeName::gameOver()
+            )
+        );
+        
+        set_cursor_position(0, 0);
+        $this->renderMatrix();
+    }
+
     public function render(
         Matrix $matrix,
         ?Tetrimino $tetrimino,
@@ -63,19 +85,10 @@ final class AnsiDisplay
 
         // render to the terminal
         set_cursor_position(0, 0);
-
-        echo canvas()
-            ->size(
-                $this->totalSize->x(),
-                $this->totalSize->y(),
-            )->pixels(
-                $this->renderMatrix
-            );
-
+        $this->renderMatrix();
+        
         ns_save_cursor_position();
-
         $this->blitScoreText($score, $level);
-
         ns_restore_cursor_position();
     }
 
@@ -223,6 +236,20 @@ final class AnsiDisplay
                 $this->colors->forShape($mino->shapeName()),
             );
         }
+    }
+
+    /**
+     * @return void
+     */
+    private function renderMatrix(): void
+    {
+        echo canvas()
+            ->size(
+                $this->totalSize->x(),
+                $this->totalSize->y(),
+            )->pixels(
+                $this->renderMatrix
+            );
     }
 
     public static function withConfiguration(
