@@ -40,7 +40,7 @@ final class DisplayEventsTextually implements EventListener
 
     private function display(string $text): void
     {
-        $this->updateLog($text);
+        $this->updateLog($text . str_repeat(' ', 10));
         $this->renderLog();
     }
 

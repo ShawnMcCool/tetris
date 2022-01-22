@@ -51,4 +51,9 @@ final class ShapeName
     {
         return new self('i');
     }
+
+    public static function ghostPiece(): self
+    {
+        return new self('ghost piece');
+    }
 }

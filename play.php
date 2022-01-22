@@ -2,6 +2,7 @@
 
 use Tetris\Game;
 use Tetris\Matrix;
+use Tetris\Processes\CloseProgramAtGameOver;
 use Tetris\Vector;
 use Tetris\SevenBag;
 use Tetris\Direction;
@@ -18,6 +19,11 @@ use Tetris\UI\Input\NonBlockingKeyboardPlayerInput;
 require 'vendor/autoload.php';
 
 /*
+ * system clock
+ */
+$clock = new SystemClock();
+
+/*
  * start the game
  */
 $game = Game::start(
@@ -25,32 +31,15 @@ $game = Game::start(
         10, 20,
         Vector::fromInt(5, 0)
     ),
-    new SevenBag()
+    new SevenBag(),
+    new NonBlockingTimer($clock, .8)
 );
-
-/*
- * system clock
- */
-$clock = new SystemClock();
 
 /*
  * frame timer
  */
 $frameTimer = new FrameTimer($clock, 20);
 $frameTimer->start();
-
-/*
- * gameplay timer
- */
-$gameplayTimer = new NonBlockingTimer($clock, .2);
-
-$gameplayTimer->onTick(
-    function () use ($game) {
-        $game->processGravity();
-    }
-);
-
-$gameplayTimer->start();
 
 /*
  * processes
@@ -60,6 +49,7 @@ $events = new DispatchEvents(
         new RenderWithCanvas(),
         new DisplayEventsTextually(),
         new SpawnNewTetrimino($game),
+        new CloseProgramAtGameOver(),
     ]
 );
 
@@ -93,6 +83,10 @@ while (true) {
             case "'": // qwerty rotate right
                 $game->rotatePiece(Direction::right());
                 break;
+            case ",": // dvorak hard drop
+            case "w": // qwerty hard drop
+                $game->hardDrop();
+                break;
             case 'q': // dvorak
             case 'x': // qwerty exit
                 die('exit');
@@ -100,7 +94,7 @@ while (true) {
     }
 
     // process game time
-    $gameplayTimer->tick();
+    $game->tick();
 
     // dispatch state changes
     $events->dispatch(

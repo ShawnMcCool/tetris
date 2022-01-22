@@ -115,4 +115,11 @@ final class Minos
     {
         return new self([]);
     }
+
+    public function withNewShapeName(ShapeName $newShapeName): self
+    {
+        return $this->map(
+            fn(Mino $mino) => Mino::at($mino->position(), $newShapeName)
+        );
+    }
 }

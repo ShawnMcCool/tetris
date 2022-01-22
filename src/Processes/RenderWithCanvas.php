@@ -1,5 +1,7 @@
 <?php namespace Tetris\Processes;
 
+use Tetris\Events\GameLevelIncreased;
+use Tetris\LineScore;
 use Tetris\Matrix;
 use Tetris\Tetrimino;
 use Tetris\Events\TetriminoFell;
@@ -18,6 +20,9 @@ final class RenderWithCanvas implements EventListener
     private Matrix $matrix;
     private Tetrimino $tetrimino;
     private AnsiDisplay $display;
+    private int $score = 0;
+    private int $level = 1;
+    private ?Tetrimino $nextTetrimino = null;
 
     function handle($event)
     {
@@ -34,6 +39,7 @@ final class RenderWithCanvas implements EventListener
             $this->render();
         } elseif ($event instanceof TetriminoWasSpawned) {
             $this->tetrimino = $event->tetrimino;
+            $this->nextTetrimino = $event->nextTetrimino;
             $this->render();
         } elseif ($event instanceof TetriminoFell) {
             $this->tetrimino = $event->tetrimino;
@@ -49,7 +55,10 @@ final class RenderWithCanvas implements EventListener
             $this->render();
         } elseif ($event instanceof LinesWereCleared) {
             $this->matrix = $event->resultingMatrix;
+            $this->score = $event->score->toInteger();
             $this->render();
+        } elseif ($event instanceof GameLevelIncreased) {
+            $this->level = $event->newLevel;
         }
     }
 
@@ -57,7 +66,10 @@ final class RenderWithCanvas implements EventListener
     {
         $this->display->render(
             $this->matrix,
-            $this->tetrimino ?? null
+            $this->tetrimino ?? null,
+            $this->nextTetrimino,
+            $this->score,
+            $this->level
         );
     }
 }
