@@ -1,14 +1,16 @@
 <?php namespace Tetris\UI\Display;
 
 use Closure;
-use Tetris\Matrix;
 use Tetris\Mino;
 use Tetris\Minos;
-use Tetris\ShapeName;
-use Tetris\Tetrimino;
+use Tetris\Matrix;
 use Tetris\Vector;
-use function PhAnsi\set_cursor_position;
+use Tetris\Tetrimino;
+use Tetris\ShapeName;
 use function Thermage\canvas;
+use function PhAnsi\set_cursor_position;
+use function PhAnsi\ns_save_cursor_position;
+use function PhAnsi\ns_restore_cursor_position;
 
 final class AnsiDisplay
 {
@@ -19,13 +21,12 @@ final class AnsiDisplay
     private Vector $nextMinoTranslation;
 
     private function __construct(
-        private Vector          $size,
-        private Vector          $padding,
-        private Vector          $wallThickness,
-        private Closure         $wallShader,
+        private Vector $size,
+        private Vector $padding,
+        private Vector $wallThickness,
+        private Closure $wallShader,
         private TetriminoColors $colors,
-    )
-    {
+    ) {
         $this->totalSize = $this->padding
             ->add($this->wallThickness->times(2))
             ->add($this->size);
@@ -36,13 +37,12 @@ final class AnsiDisplay
     }
 
     public function render(
-        Matrix     $matrix,
+        Matrix $matrix,
         ?Tetrimino $tetrimino,
         ?Tetrimino $nextTetrimino,
-        int        $score,
-        int        $level
-    ): void
-    {
+        int $score,
+        int $level
+    ): void {
         $this->clearRenderMatrix();
 
         // update the render matrix
@@ -63,6 +63,7 @@ final class AnsiDisplay
 
         // render to the terminal
         set_cursor_position(0, 0);
+        
         echo canvas()
             ->size(
                 $this->totalSize->x(),
@@ -71,8 +72,11 @@ final class AnsiDisplay
                 $this->renderMatrix
             );
 
-        $this->blitScore($score);
-        $this->blitLevel($level);
+        ns_save_cursor_position();
+        
+        $this->blitScoreText($score, $level);
+        
+        ns_restore_cursor_position();
     }
 
     public function wallShader(Closure $f): void
@@ -157,10 +161,9 @@ final class AnsiDisplay
     }
 
     private function blitMinos(
-        Minos   $minos,
+        Minos $minos,
         ?Vector $translation = null
-    ): void
-    {
+    ): void {
         if ( ! $translation) {
             $translation = Vector::zero();
         }
@@ -172,23 +175,6 @@ final class AnsiDisplay
                 $this->colors->forShape($mino->shapeName()),
             );
         }
-    }
-
-    public static function withConfiguration(
-        Vector           $size,
-        ?Vector          $wallThickness = null,
-        ?Vector          $padding = null,
-        ?Closure         $wallShader = null,
-        ?TetriminoColors $color = null,
-    ): self
-    {
-        return new self(
-            $size,
-            $wallThickness ?? Vector::one(),
-            $padding ?? Vector::one(),
-            $wallShader ?? fn($x) => $x,
-            $color ?? new TerminalSpecificTetriminoColors()
-        );
     }
 
     private function blitGhostPieceFor(Tetrimino $tetrimino, Matrix $matrix): void
@@ -207,21 +193,21 @@ final class AnsiDisplay
         // 2. write to buffer
         $this->blitMinos(
             $tetrimino->translate($ghostPieceTranslation)
-                ->minosInMatrixSpace()
-                ->withNewShapeName(ShapeName::ghostPiece())
+                      ->minosInMatrixSpace()
+                      ->withNewShapeName(ShapeName::ghostPiece())
         );
     }
 
-    private function blitScore(int $score)
+    private function blitScoreText(int $score, int $level)
     {
+        set_cursor_position(4, 45);
+        echo "next";
+        
         set_cursor_position(15, 45);
         echo "score";
         set_cursor_position(16, 47);
         echo $score;
-    }
-
-    private function blitLevel(int $level)
-    {
+        
         set_cursor_position(11, 45);
         echo "level";
         set_cursor_position(12, 47);
@@ -237,5 +223,21 @@ final class AnsiDisplay
                 $this->colors->forShape($mino->shapeName()),
             );
         }
+    }
+
+    public static function withConfiguration(
+        Vector $size,
+        ?Vector $wallThickness = null,
+        ?Vector $padding = null,
+        ?Closure $wallShader = null,
+        ?TetriminoColors $color = null,
+    ): self {
+        return new self(
+            $size,
+            $wallThickness ?? Vector::one(),
+            $padding ?? Vector::one(),
+            $wallShader ?? fn($x) => $x,
+            $color ?? new TerminalSpecificTetriminoColors()
+        );
     }
 }

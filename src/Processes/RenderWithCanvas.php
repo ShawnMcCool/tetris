@@ -1,5 +1,6 @@
 <?php namespace Tetris\Processes;
 
+use Tetris\Events\PlayerLostTheGame;
 use Tetris\Events\GameLevelIncreased;
 use Tetris\LineScore;
 use Tetris\Matrix;

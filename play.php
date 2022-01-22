@@ -2,18 +2,16 @@
 
 use Tetris\Game;
 use Tetris\Matrix;
-use Tetris\Processes\CloseProgramAtGameOver;
 use Tetris\Vector;
 use Tetris\SevenBag;
 use Tetris\Direction;
-use Tetris\TetriminoBag;
 use Tetris\Time\FrameTimer;
 use Tetris\Time\SystemClock;
 use Tetris\Time\NonBlockingTimer;
 use Tetris\Processes\RenderWithCanvas;
 use Tetris\Processes\SpawnNewTetrimino;
 use Tetris\EventDispatch\DispatchEvents;
-use Tetris\Processes\DisplayEventsTextually;
+use Tetris\Processes\CloseProgramAtGameOver;
 use Tetris\UI\Input\NonBlockingKeyboardPlayerInput;
 
 require 'vendor/autoload.php';
@@ -47,7 +45,6 @@ $frameTimer->start();
 $events = new DispatchEvents(
     [
         new RenderWithCanvas(),
-        new DisplayEventsTextually(),
         new SpawnNewTetrimino($game),
         new CloseProgramAtGameOver(),
     ]
