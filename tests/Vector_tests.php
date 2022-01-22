@@ -38,7 +38,7 @@ it('can sum two vectors', function () {
     );
 });
 
-it('can construct a zero vector', function() {
+it('can construct a zero vector', function () {
     expectTrue(
         Vector::zero()->equals(
             Vector::fromInt(0, 0)

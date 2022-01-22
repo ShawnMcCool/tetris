@@ -1,7 +1,6 @@
 <?php namespace Tetris\Time;
 
 use Closure;
-use Tetris\GameLevel;
 
 /**
  * This non-blocking timer's tick() method is run once during every game 'frame'.
@@ -59,7 +58,7 @@ class NonBlockingTimer
     private function processTick()
     {
         $this->timeOfLastTick = $this->timeOfNextTick();
-        
+
         if ($this->onTickFunction) {
             ($this->onTickFunction)($this->timeOfLastTick);
         }

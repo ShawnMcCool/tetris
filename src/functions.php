@@ -1,6 +1,7 @@
 <?php
 
-function dd(...$vars) {
+function dd(...$vars)
+{
     array_walk($vars, fn($var) => var_dump($var));
     die();
 }

@@ -1,12 +1,15 @@
 <?php namespace Tests;
 
 use Throwable;
+use Exception;
 
 require 'vendor/autoload.php';
 
 # The most incredibly naive and hardcoded testing framework ever made.
 
-class InvalidAssertion extends \Exception {}
+class InvalidAssertion extends Exception
+{
+}
 
 function it(string $description, callable $test)
 {
@@ -53,7 +56,7 @@ function expectException(string $exceptionClass, callable $test)
 {
     try {
         $test();
-    } catch (\Exception $exception) {
+    } catch (Exception $exception) {
         // the victory condition
         if (get_class($exception) === $exceptionClass) {
             return;
@@ -74,7 +77,8 @@ function expectEqual(mixed $expected, mixed $actual)
     throw new InvalidAssertion("Expected " . var_export($expected, true) . " but got " . var_export($actual, true) . ".");
 }
 
-function expectTrue(bool $expected) {
+function expectTrue(bool $expected)
+{
 
     if ($expected === true) {
         return;
@@ -83,7 +87,8 @@ function expectTrue(bool $expected) {
     throw new InvalidAssertion("Expected value to be 'true' but got 'false'.");
 }
 
-function expectFalse(bool $expected) {
+function expectFalse(bool $expected)
+{
 
     if ($expected === false) {
         return;
@@ -92,24 +97,26 @@ function expectFalse(bool $expected) {
     throw new InvalidAssertion("Expected value to be 'false' but got 'true'.");
 }
 
-function expectFloat(float $expected, float $actual) {
-    
+function expectFloat(float $expected, float $actual)
+{
+
     if (abs($expected - $actual) < PHP_FLOAT_EPSILON) {
         return;
     }
-    
+
     throw new InvalidAssertion("Expected float '{$actual}' was not within epsilon of float '{$expected}'.");
 }
 
-function expectOutputStartsWith(string $expected, callable $expression) {
-    
+function expectOutputStartsWith(string $expected, callable $expression)
+{
+
     ob_start();
     $expression();
     $actual = ob_get_clean();
-    
+
     if (str_starts_with($actual, $expected)) {
         return;
     }
-    
+
     throw new InvalidAssertion("Expected string to start with '$expected' but received '$actual'.");
 }

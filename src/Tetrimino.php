@@ -53,8 +53,8 @@ final class Tetrimino
         return $this->position;
     }
 
-    public static function withShape(Shape $shape): self
+    public static function withShape(Shape $shape, ?Vector $position = null): self
     {
-        return new self($shape, Vector::zero());
+        return new self($shape, $postion ?? Vector::zero());
     }
 }

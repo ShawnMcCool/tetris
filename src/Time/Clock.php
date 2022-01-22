@@ -3,5 +3,6 @@
 interface Clock
 {
     function currentTimeWithMilliseconds(): float;
+
     function sleepUntil(float $timestampWithMilliseconds): void;
 }

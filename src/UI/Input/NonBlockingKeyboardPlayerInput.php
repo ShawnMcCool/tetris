@@ -11,8 +11,7 @@ final class NonBlockingKeyboardPlayerInput
      */
     public function __construct(
         private DispatchEvents $events
-    )
-    {
+    ) {
         readline_callback_handler_install('', fn() => null);
         $this->stdin = fopen('php://stdin', 'r');
     }
@@ -29,6 +28,7 @@ final class NonBlockingKeyboardPlayerInput
 
         $this->events->dispatch([]);
     }
+
     public function pressedKey(): string|null
     {
         $readStreams = [$this->stdin];
@@ -46,7 +46,7 @@ final class NonBlockingKeyboardPlayerInput
         if ($numberOfChangedStreams > 0) {
             return stream_get_contents($this->stdin, 1);
         }
-        
+
         return null;
     }
 }

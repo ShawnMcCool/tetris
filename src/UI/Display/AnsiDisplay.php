@@ -63,7 +63,7 @@ final class AnsiDisplay
 
         // render to the terminal
         set_cursor_position(0, 0);
-        
+
         echo canvas()
             ->size(
                 $this->totalSize->x(),
@@ -73,9 +73,9 @@ final class AnsiDisplay
             );
 
         ns_save_cursor_position();
-        
+
         $this->blitScoreText($score, $level);
-        
+
         ns_restore_cursor_position();
     }
 
@@ -202,12 +202,12 @@ final class AnsiDisplay
     {
         set_cursor_position(4, 45);
         echo "next";
-        
+
         set_cursor_position(15, 45);
         echo "score";
         set_cursor_position(16, 47);
         echo $score;
-        
+
         set_cursor_position(11, 45);
         echo "level";
         set_cursor_position(12, 47);

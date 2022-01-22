@@ -1,15 +1,15 @@
 <?php namespace Tetris;
 
-use Tetris\Events\GameLevelIncreased;
+use Tetris\Events\TetriminoFell;
 use Tetris\Events\GameWasStarted;
+use Tetris\Time\NonBlockingTimer;
 use Tetris\Events\LinesWereCleared;
 use Tetris\Events\PlayerLostTheGame;
-use Tetris\Events\TetriminoBecameLocked;
-use Tetris\Events\TetriminoFell;
 use Tetris\Events\TetriminoWasMoved;
+use Tetris\Events\GameLevelIncreased;
 use Tetris\Events\TetriminoWasRotated;
 use Tetris\Events\TetriminoWasSpawned;
-use Tetris\Time\NonBlockingTimer;
+use Tetris\Events\TetriminoBecameLocked;
 
 final class Game
 {
@@ -19,41 +19,11 @@ final class Game
     private bool $gameIsOver = false;
 
     public function __construct(
-        private Matrix           $matrix,
-        private TetriminoBag     $bag,
+        private Matrix $matrix,
+        private TetriminoBag $bag,
         private NonBlockingTimer $gravityTimer
-    )
-    {
+    ) {
         $this->score = LineScore::empty();
-    }
-
-    private function processGravity(): void
-    {
-        if ($this->gameIsOver) {
-            return;
-        }
-        if (!$this->tetrimino) {
-            return;
-        }
-
-        $newlyPositionedTetrimino = $this->tetrimino->translate(
-            Vector::down()
-        );
-
-        // if it can fit
-        if ($this->matrix->canFit($newlyPositionedTetrimino)) {
-            // make the change
-            $this->tetrimino = $newlyPositionedTetrimino;
-
-            //
-            $this->pendingEvents[] = new TetriminoFell(
-                $this->tetrimino
-            );
-
-            return;
-        }
-
-        $this->lockTetrimino($this->tetrimino);
     }
 
     public function movePiece(Direction $direction): void
@@ -61,7 +31,7 @@ final class Game
         if ($this->gameIsOver) {
             return;
         }
-        if (!$this->tetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
 
@@ -72,7 +42,7 @@ final class Game
                 : Vector::fromInt(1, 0)
         );
 
-        if (!$this->matrix->canFit($newlyPositionedTetrimino)) {
+        if ( ! $this->matrix->canFit($newlyPositionedTetrimino)) {
             return;
         }
 
@@ -90,7 +60,7 @@ final class Game
         if ($this->gameIsOver) {
             return;
         }
-        if (!$this->tetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
 
@@ -114,13 +84,13 @@ final class Game
         if ($this->gameIsOver) {
             return;
         }
-        if (!$this->tetrimino) {
+        if ( ! $this->tetrimino) {
             return;
         }
 
         $newlyRotatedTetrimino = $this->tetrimino->rotate($direction);
 
-        if (!$this->matrix->canFit($newlyRotatedTetrimino)) {
+        if ( ! $this->matrix->canFit($newlyRotatedTetrimino)) {
             return;
         }
 
@@ -142,11 +112,12 @@ final class Game
             return;
         }
 
-        $this->tetrimino = $this->bag
-            ->draw()
-            ->translate(
-                $this->matrix->spawnPosition()
-            );
+        $this->tetrimino =
+            $this->bag
+                ->draw()
+                ->translate(
+                    $this->matrix->spawnPosition()
+                );
 
         $this->pendingEvents[] = new TetriminoWasSpawned(
             $this->tetrimino,
@@ -154,7 +125,7 @@ final class Game
         );
 
         // end the game
-        if (!$this->matrix->canFit($this->tetrimino)) {
+        if ( ! $this->matrix->canFit($this->tetrimino)) {
             $this->gameIsOver = true;
             $this->pendingEvents[] = new PlayerLostTheGame($this->matrix);
         }
@@ -167,22 +138,38 @@ final class Game
         return $pendingEvents;
     }
 
-    public static function start(
-        Matrix           $matrix,
-        TetriminoBag     $bag,
-        NonBlockingTimer $gravityTimer
-    ): self
+    public function tick(): void
     {
-        $game = new self($matrix, $bag, $gravityTimer);
+        $this->gravityTimer->tick();
+    }
 
-        $gravityTimer->onTick(
-            fn () => $game->processGravity()
+    private function processGravity(): void
+    {
+        if ($this->gameIsOver) {
+            return;
+        }
+        if ( ! $this->tetrimino) {
+            return;
+        }
+
+        $newlyPositionedTetrimino = $this->tetrimino->translate(
+            Vector::down()
         );
 
-        $gravityTimer->start();
+        // if it can fit
+        if ($this->matrix->canFit($newlyPositionedTetrimino)) {
+            // make the change
+            $this->tetrimino = $newlyPositionedTetrimino;
 
-        $game->pendingEvents[] = new GameWasStarted($matrix);
-        return $game;
+            //
+            $this->pendingEvents[] = new TetriminoFell(
+                $this->tetrimino
+            );
+
+            return;
+        }
+
+        $this->lockTetrimino($this->tetrimino);
     }
 
     private function lockTetrimino(Tetrimino $tetrimino): void
@@ -238,8 +225,20 @@ final class Game
         }
     }
 
-    public function tick(): void
-    {
-        $this->gravityTimer->tick();
+    public static function start(
+        Matrix $matrix,
+        TetriminoBag $bag,
+        NonBlockingTimer $gravityTimer
+    ): self {
+        $game = new self($matrix, $bag, $gravityTimer);
+
+        $gravityTimer->onTick(
+            fn() => $game->processGravity()
+        );
+
+        $gravityTimer->start();
+
+        $game->pendingEvents[] = new GameWasStarted($matrix);
+        return $game;
     }
 }

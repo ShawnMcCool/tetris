@@ -17,7 +17,7 @@ final class Mino
     {
         return $this->shapeName;
     }
-    
+
     public static function at(Vector $position, ?ShapeName $shapeName): self
     {
         return new self($position, $shapeName ?? ShapeName::none());
@@ -27,7 +27,7 @@ final class Mino
     {
         return $this->position->equals($that->position);
     }
-    
+
     public function translate(Vector $vector): self
     {
         return new self(

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tetris\Processes;
 
-use Tetris\EventDispatch\EventListener;
 use Tetris\Events\PlayerLostTheGame;
+use Tetris\EventDispatch\EventListener;
 
 final class CloseProgramAtGameOver implements EventListener
 {

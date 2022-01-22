@@ -86,7 +86,7 @@ final class Shape
             ]
         );
     }
-    
+
     public static function l(): self
     {
         return new self(
@@ -132,7 +132,7 @@ final class Shape
             ]
         );
     }
-    
+
     public static function s(): self
     {
         return new self(
@@ -164,7 +164,7 @@ final class Shape
             ]
         );
     }
-    
+
     public static function t(): self
     {
         return new self(
@@ -196,7 +196,7 @@ final class Shape
             ]
         );
     }
-    
+
     public static function z(): self
     {
         return new self(

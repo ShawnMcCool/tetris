@@ -135,9 +135,9 @@ final class RenderWithCharacters implements EventListener
         foreach ($this->matrix->minos()->toArray() as $mino) {
             $this->draw(
                 $mino->position()
-                    ->add(
-                        $this->matrixPosition
-                    ),
+                     ->add(
+                         $this->matrixPosition
+                     ),
                 '0'
             );
         }
@@ -145,7 +145,7 @@ final class RenderWithCharacters implements EventListener
 
     private function renderTetrimino()
     {
-        if (!isset($this->tetrimino)) {
+        if ( ! isset($this->tetrimino)) {
             return;
         }
 

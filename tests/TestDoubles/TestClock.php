@@ -5,7 +5,7 @@ use Tetris\Time\Clock;
 final class TestClock implements Clock
 {
     private float $secondsSlept = 0;
-    
+
     public function __construct(
         private float $timestampWithMilliseconds
     ) {

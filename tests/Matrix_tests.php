@@ -1,6 +1,8 @@
 <?php
 
+use Tetris\Shape;
 use Tetris\Vector;
+use Tetris\Matrix;
 use Tetris\Tetrimino;
 use function Tests\it;
 use function Tests\expectTrue;
@@ -125,29 +127,29 @@ use function Tests\expectFalse;
 //});
 
 it('can determine if a mino collides with a wall', function () {
-    $matrix = \Tetris\Matrix::withDimensions(10, 10, Vector::zero());
+    $matrix = Matrix::withDimensions(10, 10, Vector::zero());
 
     expectTrue(
         $matrix->canFit(
-            Tetrimino::t(Vector::fromInt(0, 0))
+            Tetrimino::withShape(Shape::t(), Vector::zero())
         )
     );
-    
+
     expectFalse(
         $matrix->canFit(
-            Tetrimino::t(Vector::fromInt(-1, 0))
+            Tetrimino::withShape(Shape::t(), Vector::fromInt(-1, 0))
         )
     );
-    
+
     expectTrue(
         $matrix->canFit(
-            Tetrimino::t(Vector::fromInt(7, 0))
+            Tetrimino::withShape(Shape::t(), Vector::fromInt(7, 0))
         )
     );
-    
+
     expectFalse(
         $matrix->canFit(
-            Tetrimino::t(Vector::fromInt(8, 0))
+            Tetrimino::withShape(Shape::t(), Vector::fromInt(8, 0))
         )
     );
 });

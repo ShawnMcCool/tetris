@@ -1,8 +1,5 @@
 <?php namespace Tetris\Processes;
 
-use Tetris\Events\PlayerLostTheGame;
-use Tetris\Events\GameLevelIncreased;
-use Tetris\LineScore;
 use Tetris\Matrix;
 use Tetris\Tetrimino;
 use Tetris\Events\TetriminoFell;
@@ -10,6 +7,7 @@ use Tetris\Events\GameWasStarted;
 use Tetris\UI\Display\AnsiDisplay;
 use Tetris\Events\LinesWereCleared;
 use Tetris\Events\TetriminoWasMoved;
+use Tetris\Events\GameLevelIncreased;
 use Tetris\Events\TetriminoWasRotated;
 use Tetris\Events\TetriminoWasSpawned;
 use Tetris\EventDispatch\EventListener;

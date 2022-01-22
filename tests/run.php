@@ -6,7 +6,7 @@ require 'test_bootstrap.php';
  * get all test files in /tests/
  */
 $searchDepth = '/,/*/,/*/*/,/*/*/*/,/*/*/*/*/,/*/*/*/*/*/,/*/*/*/*/*/*/,/*/*/*/*/*/*/*/,/*/*/*/*/*/*/*/*/,/*/*/*/*/*/*/*/*/*/';
-$testFiles = glob('tests{'.$searchDepth.'}*_tests.php', GLOB_BRACE);
+$testFiles = glob('tests{' . $searchDepth . '}*_tests.php', GLOB_BRACE);
 
 /*
  * if command-line arguments are present, filter the files

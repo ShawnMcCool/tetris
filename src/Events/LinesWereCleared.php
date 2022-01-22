@@ -1,7 +1,7 @@
 <?php namespace Tetris\Events;
 
-use Tetris\LineScore;
 use Tetris\Matrix;
+use Tetris\LineScore;
 
 final class LinesWereCleared
 {
