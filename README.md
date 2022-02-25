@@ -59,8 +59,6 @@ Everything in the project is written by Shawn McCool except the Thermage/Thermag
 ### Todo
 
 - tetris notification: reward the player with a notification when they clear a tetris (4 lines at once)
-- hard drop: drop a tetrimino from the current position directly into lock down by tapping 'up'
-- scoring
 - soft drop: increase the speed at which a tetrimino falls by holding 'down'
 - lock down delay: extra time given to the player to rotate the piece before it's permanently snapped into place
 - wall kick
